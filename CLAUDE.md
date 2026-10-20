@@ -39,4 +39,7 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 12. Repaso: qué reutilizo para Piliers y qué haría distinto.
 
 ## Progreso
-- [ ] Lección 1
+- [x] Lección 1 (2026-10-20): Node v22.23.3 con nvm (`.nvmrc`), proyecto Astro 7.4 con plantilla minimal,
+  `npm run dev` en localhost:4321, frontmatter + `{variables}` en `index.astro`, `.gitignore`,
+  repo en GitHub (AngieToro/aprendiendo-astro) con PAT fine-grained.
+- [ ] Lección 2
