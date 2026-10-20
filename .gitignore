@@ -1,0 +1,24 @@
+# Node (dependencias descargadas por npm install)
+node_modules/
+
+# Astro (tipos y caché que genera Astro al correr dev)
+.astro
+
+# Build (sitio generado por npm run build)
+dist/
+
+# Variables de entorno (claves y secretos)
+.env
+.env.*
+
+# IDEs (configuración personal del editor)
+.vscode/
+.idea/
+
+# Systems (archivos que crea Windows en cada carpeta)
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS (archivo oculto que crea Finder en cada carpeta)
+.DS_Store
