@@ -1,0 +1,4 @@
+# Archivos que Prettier no debe formatear (además de los del .gitignore)
+
+# npm (lo genera y formatea npm install; no se edita a mano)
+package-lock.json

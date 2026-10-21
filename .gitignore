@@ -12,7 +12,8 @@ dist/
 .env.*
 
 # IDEs (configuración personal del editor)
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 .idea/
 
 # Systems (archivos que crea Windows en cada carpeta)
