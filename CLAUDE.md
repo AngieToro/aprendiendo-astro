@@ -42,4 +42,7 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 - [x] Lección 1 (2026-10-20): Node v22.23.3 con nvm (`.nvmrc`), proyecto Astro 7.4 con plantilla minimal,
   `npm run dev` en localhost:4321, frontmatter + `{variables}` en `index.astro`, `.gitignore`,
   repo en GitHub (AngieToro/aprendiendo-astro) con PAT fine-grained.
-- [ ] Lección 2
+- [x] Lección 2 (2026-10-21): `src/layouts/BaseLayout.astro` con `interface Props` (title y description
+  obligatorias), `Astro.props`, `<slot />`; `index.astro` y `404.astro` usan el layout.
+  Aprendido: extensión `.astro` obligatoria en imports, `<X />` no pasa contenido al slot
+- [ ] Lección 3

@@ -1,17 +1,9 @@
 ---
-const nombreEmpresa="TestCorp";
+import BaseLayout from "../layouts/BaseLayout.astro";
+const description = "Consultora TI que ayuda a pymes a visualizar su negocio";
+const title = "TestCorp";
 ---
 
-<html lang="es">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro { nombreEmpresa }</title>
-	</head>
-	<body>
-		<h1>{ nombreEmpresa }</h1>
-	</body>
-</html>
+<BaseLayout {description} {title}>
+	<h1>Bienvenidos, TestCorp permite visualizar tu negocio</h1>
+</BaseLayout>
