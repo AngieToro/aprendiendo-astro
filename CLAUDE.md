@@ -49,4 +49,9 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 - [x] Lección 2 (2026-10-21): `src/layouts/BaseLayout.astro` con `interface Props` (title y description
       obligatorias), `Astro.props`, `<slot />`; `index.astro` y `404.astro` usan el layout.
       Aprendido: extensión `.astro` obligatoria en imports, `<X />` no pasa contenido al slot
-- [ ] Lección 3
+- [x] Extra (2026-10-21): Prettier + `prettier-plugin-astro` (tabs, comillas simples, sin `;`),
+      scripts `format` / `format:check`, `.prettierignore` (package-lock.json),
+      `.vscode/extensions.json` versionado.
+- [x] Lección 3 (2026-10-21): `src/components/ServiceCard.astro` (props icon/title/description, todas
+      obligatorias), usado 3 veces en una `<section>` de `index.astro`.
+- [ ] Lección 4

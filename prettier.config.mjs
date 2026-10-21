@@ -16,5 +16,5 @@ export default {
 	useTabs: true, // indentar con tabs
 	singleQuote: true, // comillas simples (')
 	semi: false, // sin punto y coma (;) al final de cada línea
-	printWidth: 80, // largo máximo de línea antes de cortarla en varias
+	printWidth: 100, // largo máximo de línea antes de cortarla en varias
 }

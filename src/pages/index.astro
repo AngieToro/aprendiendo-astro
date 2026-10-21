@@ -1,9 +1,32 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import ServiceCard from '../components/ServiceCard.astro'
 const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
-const title = 'TestCorp'
 ---
 
-<BaseLayout {description} {title}>
+<BaseLayout {description} title="TestCorp">
 	<h1>Bienvenidos, TestCorp permite visualizar tu negocio</h1>
+	<section>
+		<h2>Nuestros servicios</h2>
+		<ServiceCard
+			icon="🛡️"
+			title="Auditoría de seguridad"
+			description="Encontramos tus vulnerabilidades"
+		/>
+		<ServiceCard
+			icon="💻"
+			title="Desarrollo de aplicaciones"
+			description="Aplicaciones a medida"
+		/>
+		<ServiceCard
+			icon="☁️"
+			title="Migración a la nube"
+			description="Te actualizamos a modernas SaaS"
+		/>
+		<ServiceCard
+			icon="🎧"
+			title="Soporte TI"
+			description="Resolvemos todos tus problemas"
+		/>
+	</section>
 </BaseLayout>
