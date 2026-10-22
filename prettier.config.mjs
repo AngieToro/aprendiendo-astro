@@ -17,4 +17,5 @@ export default {
 	singleQuote: true, // comillas simples (')
 	semi: false, // sin punto y coma (;) al final de cada línea
 	printWidth: 100, // largo máximo de línea antes de cortarla en varias
+	//singleAttributePerLine: true, // una prop por línea cuando no caben todas en una
 }

@@ -9,7 +9,7 @@
 ## Para qué es este proyecto
 
 Es un mini proyecto **para aprender**, antes de construir el sitio real de un cliente
-(Proyecto Piliers: sitio one-page estático, con menú de anclas, secciones Inicio, Quiénes somos,
+(Proyecto del cliente: sitio one-page estático, con menú de anclas, secciones Inicio, Quiénes somos,
 Equipo, Valores/Misión/Visión, Servicio, Metodología y Contacto por mailto + WhatsApp,
 SEO básico y deploy en hosting estático gratuito).
 
@@ -25,6 +25,9 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 - Prefiere lo simple y lo oficial (documentación de Astro y Tailwind) antes que librerías extra.
 - Antes de instalar algo o correr un comando, dime qué hace.
 - Al final de cada lección, actualiza la sección "Progreso" de este archivo.
+- Cada vez que instalemos o configuremos algo, actualiza el `README.md`: el paso a paso en
+  "Cómo se armó" (comandos y qué hacen) y los tips importantes de la lección en "Tips importantes".
+  El README es el manual que voy a seguir para armar el proyecto del cliente.
 
 ## Plan de lecciones
 
@@ -39,7 +42,7 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 9. Contacto: botones mailto y WhatsApp (`wa.me`).
 10. SEO: title, description, Open Graph, favicon, sitemap, robots.txt; auditoría Lighthouse.
 11. Deploy: conectar GitHub a Cloudflare Pages (o Netlify), dominio de prueba, HTTPS.
-12. Repaso: qué reutilizo para Piliers y qué haría distinto.
+12. Repaso: qué reutilizo para el proyecto del cliente y qué haría distinto.
 
 ## Progreso
 
@@ -54,4 +57,9 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       `.vscode/extensions.json` versionado.
 - [x] Lección 3 (2026-10-21): `src/components/ServiceCard.astro` (props icon/title/description, todas
       obligatorias), usado 3 veces en una `<section>` de `index.astro`.
-- [ ] Lección 4
+- [x] Lección 4 (2026-10-22): Tailwind 4.3 con `npx astro add tailwind`, `global.css` importado en
+      `BaseLayout`, extensión Tailwind CSS IntelliSense. ServiceCard con caja/espacios/texto/hover,
+      grilla responsive (1 / md:2 / lg:4 columnas), h1 responsive, botón centrado en la 404.
+      Referencia: `docs/tailwind-referencia.xlsx`. Método de 4 capas (caja → espacios → texto →
+      interacción); `flex`/`grid` van en el padre; clases mal escritas no dan error.
+- [ ] Lección 5

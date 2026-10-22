@@ -5,6 +5,15 @@ const title = 'TestCorp - Error'
 ---
 
 <BaseLayout {description} {title}>
-	<h1>La página consultada no fue encontrada</h1>
-	<a href="/">Inicio</a>
+	<h1 class="font-bold text-center text-3xl md:text-4xl px-4 py-12">
+		La página consultada no fue encontrada
+	</h1>
+	<section class="py-16 px-4 bg-slate-50 text-center">
+		<a
+			href="/"
+			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block transition"
+		>
+			Inicio
+		</a>
+	</section>
 </BaseLayout>

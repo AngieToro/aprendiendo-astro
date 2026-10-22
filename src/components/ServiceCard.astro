@@ -8,8 +8,10 @@ interface Props {
 const { icon, title, description } = Astro.props
 ---
 
-<article>
-	<span aria-hidden="true">{icon}</span>
-	<h3>{title}</h3>
-	<p>{description}</p>
+<article class="p-6 bg-white border border-slate-200 shadow-sm transition hover:-translate-y-1 rounded-lg">
+	<div class="flex items-center mb-2 gap-2">
+		<span aria-hidden="true">{icon}</span>
+		<h3 class="font-semibold">{title}</h3>
+	</div>
+	<p class="text-sm text-slate-600">{description}</p>
 </article>

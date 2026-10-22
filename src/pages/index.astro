@@ -5,28 +5,28 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
 
 <BaseLayout {description} title="TestCorp">
-	<h1>Bienvenidos, TestCorp permite visualizar tu negocio</h1>
-	<section>
-		<h2>Nuestros servicios</h2>
-		<ServiceCard
-			icon="🛡️"
-			title="Auditoría de seguridad"
-			description="Encontramos tus vulnerabilidades"
-		/>
-		<ServiceCard
-			icon="💻"
-			title="Desarrollo de aplicaciones"
-			description="Aplicaciones a medida"
-		/>
-		<ServiceCard
-			icon="☁️"
-			title="Migración a la nube"
-			description="Te actualizamos a modernas SaaS"
-		/>
-		<ServiceCard
-			icon="🎧"
-			title="Soporte TI"
-			description="Resolvemos todos tus problemas"
-		/>
+	<h1 class="font-bold text-center text-3xl md:text-4xl px-4 py-12">
+		Bienvenidos, TestCorp permite visualizar tu negocio
+	</h1>
+	<section class="py-16 px-4 bg-slate-50">
+		<h2 class="font-semibold text-center text-2xl mb-8">Nuestros servicios</h2>
+		<div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+			<ServiceCard
+				icon="🛡️"
+				title="Auditoría de seguridad"
+				description="Encontramos tus vulnerabilidades"
+			/>
+			<ServiceCard
+				icon="💻"
+				title="Desarrollo de aplicaciones"
+				description="Aplicaciones a medida"
+			/>
+			<ServiceCard
+				icon="☁️"
+				title="Migración a la nube"
+				description="Te actualizamos a modernas SaaS"
+			/>
+			<ServiceCard icon="🎧" title="Soporte TI" description="Resolvemos todos tus problemas" />
+		</div>
 	</section>
 </BaseLayout>
