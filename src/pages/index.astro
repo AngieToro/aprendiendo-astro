@@ -4,15 +4,16 @@ import ServiceCard from '../components/ServiceCard.astro'
 const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
 
-<BaseLayout
-	{description}
-	title="TestCorp"
->
-	<h1 class="font-bold text-center text-3xl md:text-4xl px-4 py-12">
-		Bienvenidos, TestCorp permite visualizar tu negocio
+<BaseLayout {description} title="TestCorp">
+	<h1 class="font-bold text-center text-3xl md:text-4xl px-4 py-12 bg-primario text-white font-titulos">
+		<p>Bienvenidos</p>
+		<p>TestCorp te permite visualizar tu negocio</p>
 	</h1>
-	<section class="py-16 px-4 bg-slate-50">
-		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-8">Nuestros servicios</h2>
+	<section class="py-16 px-4 bg-fondo">
+		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
+			Nuestros servicios
+		</h2>
+		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
 		<div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
 			<ServiceCard
 				icon="🛡️"
@@ -29,11 +30,7 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 				title="Migración a la nube"
 				description="Te actualizamos a modernas SaaS"
 			/>
-			<ServiceCard
-				icon="🎧"
-				title="Soporte TI"
-				description="Resolvemos todos tus problemas"
-			/>
+			<ServiceCard icon="🎧" title="Soporte TI" description="Resolvemos todos tus problemas" />
 		</div>
 	</section>
 </BaseLayout>

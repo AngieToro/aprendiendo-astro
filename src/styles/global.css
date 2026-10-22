@@ -1,1 +1,35 @@
 @import 'tailwindcss';
+
+/*
+ * Sistema de diseño de TestCorp: colores y tipografías de marca.
+ * Cada --color-X genera las clases bg-X, text-X, border-X (y con prefijos: hover:bg-X, md:text-X...).
+ * Contraste (WCAG AA): texto normal >= 4.5, texto grande y en negrita >= 3.0.
+ */
+@theme {
+	/* Primario (navy): botones, títulos, header. Con texto blanco: contraste 17.2 */
+	--color-primario: #001a3f;
+	/* Hover del primario: un navy un poco más claro. Con texto blanco: 13.0 */
+	--color-primario-hover: #0a2f66;
+
+	/* Secundario (celeste): fondos, bordes, íconos. NUNCA con texto blanco (2.6); con texto navy: 6.6 */
+	--color-secundario: #5ca7e0;
+
+	/* Acento (naranja): detalles que deben destacar. Con texto navy: 5.2.
+	   Con texto blanco (3.3) solo si el texto es grande y en negrita */
+	--color-acento: #f55a1e;
+
+	/* Fondo suave (celeste muy claro): fondo de secciones. Con texto navy: 15.8 */
+	--color-fondo: #eef6fc;
+}
+
+/*
+ * Tipografías: las variables --font-poppins y --font-open-sans las crea Astro
+ * (ver "fonts" en astro.config.mjs y el componente <Font> en BaseLayout).
+ * "inline" hace que Tailwind use la variable de Astro directamente en cada clase.
+ */
+@theme inline {
+	/* Fuente por defecto de toda la página (texto) */
+	--font-sans: var(--font-open-sans);
+	/* Clase font-titulos para h1, h2, h3 */
+	--font-titulos: var(--font-poppins);
+}

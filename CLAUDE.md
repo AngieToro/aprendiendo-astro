@@ -62,4 +62,8 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       grilla responsive (1 / md:2 / lg:4 columnas), h1 responsive, botón centrado en la 404.
       Referencia: `docs/tailwind-referencia.xlsx`. Método de 4 capas (caja → espacios → texto →
       interacción); `flex`/`grid` van en el padre; clases mal escritas no dan error.
-- [ ] Lección 5
+- [x] Lección 5 (2026-10-22): tokens de color en `@theme` de `global.css` (primario, primario-hover,
+      secundario, acento, fondo; nombres por función, contraste WCAG documentado). Fuentes con la
+      API de Astro (`fonts` + `fontProviders.google()` + `<Font>`): Poppins (títulos, clase
+      `font-titulos`) y Open Sans (texto, `--font-sans`). Colores genéricos reemplazados por tokens.
+- [ ] Lección 6

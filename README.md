@@ -56,11 +56,11 @@ aprendiendo-astro/
 │   ├── components/
 │   │   └── ServiceCard.astro    ← tarjeta de servicio (props: icon, title, description)
 │   └── styles/
-│       └── global.css           ← carga Tailwind (@import "tailwindcss")
+│       └── global.css           ← carga Tailwind + tokens de marca (@theme)
 ├── public/                      ← se copia tal cual al sitio (favicon, PDFs)
 ├── docs/
 │   └── tailwind-referencia.xlsx ← referencia de clases Tailwind (solo local, no se versiona)
-├── astro.config.mjs             ← configuración de Astro (plugin de Tailwind)
+├── astro.config.mjs             ← configuración de Astro (plugin de Tailwind y fuentes)
 ├── prettier.config.mjs          ← reglas de formato del proyecto
 ├── .prettierignore              ← archivos que Prettier no toca
 ├── .gitignore                   ← archivos que Git no versiona
@@ -147,6 +147,35 @@ Extensión de VS Code **Tailwind CSS IntelliSense** (`bradlc.vscode-tailwindcss`
 autocompleta las clases mientras escribes `class="..."` y, al pasar el mouse, muestra el CSS que aplica.
 Quedó agregada a `.vscode/extensions.json`.
 
+### 6. Sistema de diseño: colores y fuentes de marca (lección 5)
+
+**Colores** como tokens en `src/styles/global.css` (Tailwind 4 no usa `tailwind.config.js`):
+
+```css
+@theme {
+	--color-primario: #001a3f; /* genera bg-primario, text-primario, border-primario... */
+	--color-primario-hover: #0a2f66;
+	--color-secundario: #5ca7e0;
+	--color-acento: #f55a1e;
+	--color-fondo: #eef6fc;
+}
+```
+
+**Fuentes** con el sistema oficial de Astro (descarga las fuentes en el build y las sirve desde el sitio):
+
+1. `astro.config.mjs`: importar `fontProviders` y agregar `fonts: [{ provider: fontProviders.google(),
+name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
+2. `BaseLayout.astro`: `import { Font } from 'astro:assets'` y en el `<head>`
+   `<Font cssVariable="--font-poppins" preload />` + `<Font cssVariable="--font-open-sans" />`.
+3. `global.css`: conectar con Tailwind.
+
+```css
+@theme inline {
+	--font-sans: var(--font-open-sans); /* fuente por defecto de toda la página */
+	--font-titulos: var(--font-poppins); /* clase font-titulos */
+}
+```
+
 ---
 
 ## Tips importantes
@@ -190,6 +219,25 @@ Quedó agregada a `.vscode/extensions.json`.
 - La etiqueta se elige por lo que **significa**, no por cómo se ve (el tamaño lo dan los estilos).
 - `<section>` = capítulo de la página con su `h2`. `<article>` = bloque que se entiende solo (tarjeta).
 - `lang="es"` en `<html>`. Íconos decorativos con `aria-hidden="true"`.
+
+### Sistema de diseño (colores y fuentes)
+
+- Tokens con nombre por **función** (`primario`, `acento`, `fondo`), no por apariencia (`navy`,
+  `naranja`): si la marca cambia un color, se edita una línea y las clases siguen teniendo sentido.
+- Cada token se usa solo para su función: `primario-hover` es para hover de botones, no para títulos.
+- El prefijo de la variable define la clase: `--color-X` → `bg-X`, `text-X`, `border-X`; `--font-X` →
+  `font-X`. `--font-sans` reemplaza la fuente por defecto. Opacidad: `border-secundario/30`.
+- Tailwind 4 solo incluye en el CSS final los tokens que se usan en alguna clase.
+- Contraste mínimo (WCAG AA): 4.5 para texto normal, 3.0 para texto grande y en negrita. Al poner un
+  `bg-` oscuro, revisar el `text-` del mismo elemento. Celeste con texto blanco no pasa (2.6).
+- El acento se usa **poco**: si todo destaca, nada destaca.
+- Además de los colores de la marca, el sitio necesita colores de **soporte** (fondo) y **neutros**
+  (grises para texto secundario y bordes).
+- Fuentes: si no se indica `weights`, Astro descarga solo el 400. Pedir solo los grosores que se usan.
+- `preload` solo para la fuente que se ve primero; acepta filtro: `preload={[{ weight: 700, subset: 'latin' }]}`.
+- Cadena de una fuente: `astro.config.mjs` (descarga) → `<Font>` en el `<head>` (publica la variable) →
+  `@theme inline` (crea la clase). Si una fuente no aparece, revisar los tres en ese orden.
+- `import { Font } from 'astro:assets'` va **con llaves** (export con nombre); los `.astro` van sin llaves.
 
 ### Prettier
 
