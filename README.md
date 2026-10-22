@@ -59,7 +59,7 @@ aprendiendo-astro/
 │       └── global.css           ← carga Tailwind (@import "tailwindcss")
 ├── public/                      ← se copia tal cual al sitio (favicon, PDFs)
 ├── docs/
-│   └── tailwind-referencia.xlsx ← hoja de referencia de clases Tailwind
+│   └── tailwind-referencia.xlsx ← referencia de clases Tailwind (solo local, no se versiona)
 ├── astro.config.mjs             ← configuración de Astro (plugin de Tailwind)
 ├── prettier.config.mjs          ← reglas de formato del proyecto
 ├── .prettierignore              ← archivos que Prettier no toca
@@ -167,6 +167,9 @@ Quedó agregada a `.vscode/extensions.json`.
 - Revisar con `git status` y `git diff --stat` **antes** de cada commit. `git diff -w` ignora cambios
   de espacios.
 - Un commit por tema. No reescribir commits que ya están subidos.
+- Para dejar de versionar algo que ya se subió **sin borrarlo del disco**: agregarlo al `.gitignore` y
+  `git rm -r --cached <ruta>`. Agregarlo solo al `.gitignore` no basta (solo afecta a archivos nuevos).
+- `~$*` en el `.gitignore`: archivos temporales que crea Office mientras un documento está abierto.
 
 ### Astro
 
@@ -219,7 +222,7 @@ hover:bg-blue-700`.
   responsabilidad por elemento: la sección da el aire del bloque, el título solo su `mb-`.
 - Definir `bg-white text-slate-900` en el `<body>`: si no, el fondo es transparente y cada navegador
   (o el modo oscuro) decide el color.
-- Referencia de clases: [`docs/tailwind-referencia.xlsx`](docs/tailwind-referencia.xlsx) y
+- Referencia de clases: `docs/tailwind-referencia.xlsx` (archivo local, ignorado por Git) y
   [tailwindcss.com/docs](https://tailwindcss.com/docs).
 
 ---

@@ -23,3 +23,9 @@ Desktop.ini
 
 # macOS (archivo oculto que crea Finder en cada carpeta)
 .DS_Store
+
+# Documentos de estudio (solo locales)
+docs/
+
+# Archivos temporales de Office (se crean al abrir un documento)
+~$*
