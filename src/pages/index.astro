@@ -5,16 +5,29 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
 
 <BaseLayout {description} title="TestCorp">
-	<h1 class="font-bold text-center text-3xl md:text-4xl px-4 py-12 bg-primario text-white font-titulos">
-		<p>Bienvenidos</p>
-		<p>TestCorp te permite visualizar tu negocio</p>
-	</h1>
-	<section class="py-16 px-4 bg-fondo">
+	<section id="inicio" class="bg-primario text-white px-4 py-16 text-center">
+		<h1 class="font-bold text-3xl md:text-4xl font-titulos">
+			<span class="block">Bienvenidos</span>
+			<span class="block">TestCorp te permite visualizar tu negocio</span>
+		</h1>
+	</section>
+
+	<section id="nosotros" class="py-8 px-4 scroll-mt-20">
+		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
+			Quiénes somos
+		</h2>
+		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
+		<p class="max-w-2xl mx-auto text-center text-slate-600">
+			Somos un equipo de consultores TI que acompaña a pymes en su transformación digital.
+		</p>
+	</section>
+
+	<section id="servicios" class="py-8 px-4 bg-fondo scroll-mt-20">
 		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
 			Nuestros servicios
 		</h2>
 		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
-		<div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+		<div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 			<ServiceCard
 				icon="🛡️"
 				title="Auditoría de seguridad"
@@ -31,6 +44,19 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 				description="Te actualizamos a modernas SaaS"
 			/>
 			<ServiceCard icon="🎧" title="Soporte TI" description="Resolvemos todos tus problemas" />
+			<ServiceCard
+				icon="💼"
+				title="Gemelo digital"
+				description="Creamos la representación virtual de tu organización"
+			/>
 		</div>
+	</section>
+
+	<section id="contacto" class="py-8 px-4 scroll-mt-20">
+		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
+			Contáctanos
+		</h2>
+		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
+		<p class="max-w-2xl mx-auto text-center text-slate-600">Escríbenos por correo o WhatsApp.</p>
 	</section>
 </BaseLayout>

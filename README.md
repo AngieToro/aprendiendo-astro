@@ -54,10 +54,12 @@ aprendiendo-astro/
 │   ├── layouts/
 │   │   └── BaseLayout.astro     ← <html>, <head> y <body> comunes (props: title, description)
 │   ├── components/
-│   │   └── ServiceCard.astro    ← tarjeta de servicio (props: icon, title, description)
+│   │   ├── ServiceCard.astro    ← tarjeta de servicio (props: icon, title, description)
+│   │   ├── Header.astro         ← logo + menú de anclas + hamburguesa (con <script>)
+│   │   └── Logo.astro           ← ícono SVG + nombre (usa tokens de color)
 │   └── styles/
 │       └── global.css           ← carga Tailwind + tokens de marca (@theme)
-├── public/                      ← se copia tal cual al sitio (favicon, PDFs)
+├── public/                      ← se copia tal cual al sitio (favicon.svg, PDFs)
 ├── docs/
 │   └── tailwind-referencia.xlsx ← referencia de clases Tailwind (solo local, no se versiona)
 ├── astro.config.mjs             ← configuración de Astro (plugin de Tailwind y fuentes)
@@ -176,6 +178,18 @@ name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
 }
 ```
 
+### 7. One-page: header fijo, anclas y menú hamburguesa (lección 6)
+
+- Cada sección de `index.astro` tiene un `id` (`inicio`, `nosotros`, `servicios`, `contacto`).
+- `src/components/Header.astro` (incluido en `BaseLayout`): logo (`Logo.astro`, SVG inline con
+  `fill-primario`…) + `<nav>` con enlaces `href="/#id"`.
+- Header pegado arriba: `sticky top-0 z-10`. Scroll suave: `scroll-smooth` en `<html>`. Para que el
+  header no tape el título al saltar: `scroll-mt-20` en cada sección.
+- Menú hamburguesa: botón `md:hidden` con `aria-expanded` y texto `sr-only`; menú
+  `hidden md:block`; un `<script>` en el componente pone/quita `hidden` y actualiza `aria-expanded`.
+- Favicon: `public/favicon.svg` con el ícono del logo (colores en hex, no ve las clases de Tailwind).
+  Se eliminó `favicon.ico` de la plantilla.
+
 ---
 
 ## Tips importantes
@@ -238,6 +252,33 @@ name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
 - Cadena de una fuente: `astro.config.mjs` (descarga) → `<Font>` en el `<head>` (publica la variable) →
   `@theme inline` (crea la clase). Si una fuente no aparece, revisar los tres en ese orden.
 - `import { Font } from 'astro:assets'` va **con llaves** (export con nombre); los `.astro` van sin llaves.
+
+### One-page y JavaScript
+
+- Enlaces del menú con `/#seccion` (no solo `#seccion`): así funcionan también desde la 404 u otra página.
+- `sticky top-0` mejor que `fixed`: `fixed` saca el header del flujo y el contenido queda debajo.
+  Agregar `z-10` para que el contenido no lo pise. Nunca copiar `hover:-translate-y-1` de las tarjetas.
+- `scroll-mt-N` ≈ alto del header (64px → `scroll-mt-20`). Sin número (`scroll-mt`) no hace nada.
+- `hidden md:block`: oculto en celular, visible desde `md`. En escritorio `md:block` gana sobre
+  `hidden`, así el JS no necesita saber el tamaño de pantalla. Para menús largos, usar `lg:`.
+- Botones interactivos con `<button>` (no `<div>`): teclado y lector de pantalla funcionan solos.
+  Ícono sin texto → `<span class="sr-only">` con la descripción.
+- Patrón de JS: buscar (`querySelector`) → verificar (`if (a && b)`) → escuchar (`addEventListener`)
+  → cambiar una clase (`classList.toggle/add`). Los estilos los pone Tailwind; el JS solo cambia clases.
+- `classList.toggle('hidden')` devuelve `true` si la clase quedó puesta (menú oculto):
+  `aria-expanded` = `String(!quedoOculto)`. `aria-expanded` va en el **botón**.
+- Nombres de variables que digan qué guardan (`quedoOculto`, no `botonActivo`).
+- Un `<script>` en un componente `.astro` se procesa y se incluye una sola vez.
+- El logo siempre enlaza al inicio (`<a href="/"><Logo /></a>`).
+- Favicon: es un archivo aparte que el navegador descarga (no un componente). Si no cambia, recargar
+  con `Cmd + Shift + R` (caché).
+
+### Entorno (macOS)
+
+- **No guardar proyectos en carpetas sincronizadas** (iCloud Documentos/Escritorio, Dropbox,
+  OneDrive): iCloud puede dejar archivos de `node_modules` solo en la nube ("dataless") y `npm run dev`
+  se queda colgado sin error. Usar por ejemplo `~/Proyectos`. GitHub ya es el respaldo.
+- Si algo raro pasa dentro de `node_modules`: `rm -rf node_modules` y `npm install`.
 
 ### Prettier
 

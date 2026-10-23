@@ -66,4 +66,8 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       secundario, acento, fondo; nombres por función, contraste WCAG documentado). Fuentes con la
       API de Astro (`fonts` + `fontProviders.google()` + `<Font>`): Poppins (títulos, clase
       `font-titulos`) y Open Sans (texto, `--font-sans`). Colores genéricos reemplazados por tokens.
-- [ ] Lección 6
+- [x] Lección 6 (2026-10-23): secciones con `id` (inicio, nosotros, servicios, contacto), `Header.astro`
+      (sticky top-0 z-10, enlaces `/#id`, `scroll-smooth` + `scroll-mt-20`), `Logo.astro` (SVG inline con
+      tokens) y favicon SVG. Menú hamburguesa: botón `md:hidden` + `aria-expanded`, menú
+      `hidden md:block`, `<script>` con `classList.toggle`.
+- [ ] Lección 7
