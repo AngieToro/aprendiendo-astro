@@ -314,6 +314,86 @@ hover:bg-blue-700`.
 - Referencia de clases: `docs/tailwind-referencia.xlsx` (archivo local, ignorado por Git) y
   [tailwindcss.com/docs](https://tailwindcss.com/docs).
 
+## Recetas de layout
+
+Cuando algo se ve raro, recorrer estas preguntas **antes** de cambiar clases al azar:
+
+| Pregunta | Respuesta |
+| --- | --- |
+| ¿El tamaño es **fijo** o **depende del padre**? | `w-full` = ancho del padre (cambia con la grilla). `w-28 h-36` = fijo, siempre igual |
+| ¿**Quién** decide la distribución? | El **padre**: `grid`/`flex` en el contenedor. Desde la página se puede dar ancho a todos los hijos con `*:w-72` |
+| ¿**`grid`** o **`flex`**? | `grid` = columnas exactas, filas completas. `flex flex-wrap justify-center` = la última fila incompleta queda centrada |
+| ¿Cómo **centro** esto? | Texto o elemento en línea → `text-center` (en el padre). Bloque con ancho → `mx-auto`. Hijos de un `flex` → `justify-center` |
+| ¿Por qué se **estira** tanto? | Falta un límite: `max-w-4xl mx-auto` |
+
+Diagnóstico rápido cuando una clase "no hace nada": ¿la clase existe (IntelliSense muestra el CSS)? →
+¿está en el elemento correcto (padre/hijo)? → ¿falta su pareja (`grid` + `grid-cols-N`, `border` + color)
+o su prefijo (`hover:`, `md:`)? → ¿el valor es suficientemente grande?
+
+### Sección con título y línea de acento
+
+```astro
+<section id="servicios" class="py-8 px-4 bg-fondo scroll-mt-20">
+	<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">Título</h2>
+	<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
+	<!-- contenido -->
+</section>
+```
+
+### Grilla con filas completas (ej. 6 personas: 2 / 3 columnas)
+
+```astro
+<div class="grid gap-4 grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto">
+	{members.map((member) => <TeamCard {...member} />)}
+</div>
+```
+
+Elegir columnas según la cantidad: con 6 elementos, 2, 3 y 6 columnas dan filas completas.
+
+### Grilla con la última fila centrada (ej. 5 servicios)
+
+```astro
+<div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto *:w-full sm:*:w-72">
+	{services.map((service) => <ServiceCard {...service} />)}
+</div>
+```
+
+En `flex` los elementos de una fila se estiran al alto del más alto (`items-stretch`): todas las tarjetas
+de una fila quedan iguales aunque el texto tenga largos distintos.
+
+### Tarjeta con foto pequeña centrada
+
+```astro
+<article class="p-4 text-center bg-white border border-secundario/30 rounded-lg shadow-sm
+	transition hover:-translate-y-1 hover:border-acento">
+	<Image src={photo} alt={`Foto de ${name}`} width={224} height={288}
+		class="w-28 h-36 mx-auto mb-3 rounded-md object-cover object-top" />
+	<h3 class="font-semibold text-primario font-titulos">{name}</h3>
+	<div class="w-10 h-0.5 bg-acento mx-auto my-2" aria-hidden="true"></div>
+	<p class="text-sm text-slate-600">{title}</p>
+</article>
+```
+
+- `object-cover` + tamaño fijo (o `aspect-*`) = todas las fotos del mismo tamaño aunque los originales
+  sean distintos; `object-top` evita cortar la cabeza.
+- `width`/`height` del `<Image>` = píxeles del **archivo** (el doble de lo que se muestra, por Retina);
+  `w-28 h-36` = tamaño **en pantalla**.
+- Foto que toca los bordes de una tarjeta redondeada: `overflow-hidden` en la tarjeta.
+
+### Tarjeta con ícono y título en la misma fila (centrados)
+
+```astro
+<article class="p-4 text-center ...">
+	<div class="flex items-center justify-center gap-2 mb-2">
+		<span aria-hidden="true">{icon}</span>
+		<h3 class="font-semibold text-primario font-titulos">{title}</h3>
+	</div>
+	<p class="text-sm text-slate-600">{description}</p>
+</article>
+```
+
+`text-center` no centra los hijos de un `flex`: para eso es `justify-center`.
+
 ---
 
 ## Para reutilizar en el proyecto del cliente

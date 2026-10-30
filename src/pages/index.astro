@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import ServiceCard from '../components/ServiceCard.astro'
+import TeamCard from '../components/TeamCard.astro'
+import { services } from '../data/services.ts'
+import { members } from '../data/teams.ts'
 const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
 
@@ -22,33 +25,27 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 		</p>
 	</section>
 
+	<section id="equipo" class="py-8 px-4 scroll-mt-20">
+		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
+			Equipo
+		</h2>
+		<div class="w-10 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
+		<div class="grid gap-4 grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto">
+			{members.map((member) => (
+				<TeamCard {...member} />
+			))}
+		</div>
+	</section>
+
 	<section id="servicios" class="py-8 px-4 bg-fondo scroll-mt-20">
 		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
 			Nuestros servicios
 		</h2>
 		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
-		<div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-			<ServiceCard
-				icon="🛡️"
-				title="Auditoría de seguridad"
-				description="Encontramos tus vulnerabilidades"
-			/>
-			<ServiceCard
-				icon="💻"
-				title="Desarrollo de aplicaciones"
-				description="Aplicaciones a medida"
-			/>
-			<ServiceCard
-				icon="☁️"
-				title="Migración a la nube"
-				description="Te actualizamos a modernas SaaS"
-			/>
-			<ServiceCard icon="🎧" title="Soporte TI" description="Resolvemos todos tus problemas" />
-			<ServiceCard
-				icon="💼"
-				title="Gemelo digital"
-				description="Creamos la representación virtual de tu organización"
-			/>
+		<div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto *:w-full sm:*:w-72">
+			{services.map((service) => (
+				<ServiceCard {...service} />
+			))}
 		</div>
 	</section>
 

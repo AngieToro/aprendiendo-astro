@@ -43,6 +43,8 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 10. SEO: title, description, Open Graph, favicon, sitemap, robots.txt; auditoría Lighthouse.
 11. Deploy: conectar GitHub a Cloudflare Pages (o Netlify), dominio de prueba, HTTPS.
 12. Repaso: qué reutilizo para el proyecto del cliente y qué haría distinto.
+13. (Extra, después del repaso) CMS headless sobre los archivos de datos (ej. Decap CMS, Pages CMS o
+    TinaCMS) para que un cliente edite contenido sin código. Decisión actual: mantenimiento con Git (opción A).
 
 ## Progreso
 
@@ -70,4 +72,4 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       (sticky top-0 z-10, enlaces `/#id`, `scroll-smooth` + `scroll-mt-20`), `Logo.astro` (SVG inline con
       tokens) y favicon SVG. Menú hamburguesa: botón `md:hidden` + `aria-expanded`, menú
       `hidden md:block`, `<script>` con `classList.toggle`.
-- [ ] Lección 7
+- [ ] Lección 7 — incluye: sección Equipo + extra del menú desplegable "Nosotros" (Quiénes somos + Equipo)
