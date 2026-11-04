@@ -190,6 +190,13 @@ name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
 - Favicon: `public/favicon.svg` con el ícono del logo (colores en hex, no ve las clases de Tailwind).
   Se eliminó `favicon.ico` de la plantilla.
 
+### 8. Datos, equipo, fotos y desplegable (lecciones 7 y 8)
+
+- `src/data/services.ts` y `src/data/teams.ts`: interfaz + lista exportada. `index.astro` las recorre con `.map()`.
+- `src/components/TeamCard.astro` con `<Image />` de `astro:assets`; fotos en `src/assets/team/` importadas en
+  `teams.ts`.
+- En `Header.astro`, "Nosotros" es un desplegable (Quiénes somos + Equipo) con su `<script>`.
+
 ---
 
 ## Tips importantes
@@ -273,12 +280,21 @@ name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
 - Favicon: es un archivo aparte que el navegador descarga (no un componente). Si no cambia, recargar
   con `Cmd + Shift + R` (caché).
 
-### Entorno (macOS)
+### Datos, imágenes y desplegable
 
-- **No guardar proyectos en carpetas sincronizadas** (iCloud Documentos/Escritorio, Dropbox,
-  OneDrive): iCloud puede dejar archivos de `node_modules` solo en la nube ("dataless") y `npm run dev`
-  se queda colgado sin error. Usar por ejemplo `~/Proyectos`. GitHub ya es el respaldo.
-- Si algo raro pasa dentro de `node_modules`: `rm -rf node_modules` y `npm install`.
+- Patrón datos → `.map()` → componente: la lista vive en `src/data/*.ts` y se importa con llaves.
+  Agregar o reordenar elementos no toca el HTML. El `.map()` corre en el build: el navegador recibe HTML.
+- `=> ( ... )` devuelve el componente; `=> { ... }` es un bloque y necesita `return`. Si Prettier agrega un
+  `;` antes de un componente, ese componente no se está devolviendo.
+- `{...objeto}` pasa todos los campos de un objeto como props, si se llaman igual.
+- Reutilizar tipos: `import type { Member } from '../data/teams'` + `type Props = Member`.
+- Fotos de contenido en `src/assets/` (Astro las optimiza), importadas con tipo `ImageMetadata`. `alt` es obligatorio.
+- Usar solo fotos con licencia libre (Unsplash, Pexels) o autorizadas: que una foto sea visible en internet
+  no da permiso para publicarla. No subir datos de terceros a repositorios públicos sin consentimiento.
+- Desplegable: `<button>` con `aria-expanded` + lista `hidden`. `relative` en el `<li>` y `md:absolute` en la
+  lista: flota en escritorio y empuja en celular. Debe cerrarse con Escape y con clic fuera (escuchadores en
+  `document`), excluyendo el botón con `.contains()`. Flecha sin JS: `group` + `group-aria-expanded:rotate-180`.
+- Repetir la misma lógica 3 veces = sacarla a una función (`cerrarSubmenu`). Con paréntesis se ejecuta.
 
 ### Prettier
 
@@ -318,13 +334,13 @@ hover:bg-blue-700`.
 
 Cuando algo se ve raro, recorrer estas preguntas **antes** de cambiar clases al azar:
 
-| Pregunta | Respuesta |
-| --- | --- |
-| ¿El tamaño es **fijo** o **depende del padre**? | `w-full` = ancho del padre (cambia con la grilla). `w-28 h-36` = fijo, siempre igual |
-| ¿**Quién** decide la distribución? | El **padre**: `grid`/`flex` en el contenedor. Desde la página se puede dar ancho a todos los hijos con `*:w-72` |
-| ¿**`grid`** o **`flex`**? | `grid` = columnas exactas, filas completas. `flex flex-wrap justify-center` = la última fila incompleta queda centrada |
-| ¿Cómo **centro** esto? | Texto o elemento en línea → `text-center` (en el padre). Bloque con ancho → `mx-auto`. Hijos de un `flex` → `justify-center` |
-| ¿Por qué se **estira** tanto? | Falta un límite: `max-w-4xl mx-auto` |
+| Pregunta                                        | Respuesta                                                                                                                    |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| ¿El tamaño es **fijo** o **depende del padre**? | `w-full` = ancho del padre (cambia con la grilla). `w-28 h-36` = fijo, siempre igual                                         |
+| ¿**Quién** decide la distribución?              | El **padre**: `grid`/`flex` en el contenedor. Desde la página se puede dar ancho a todos los hijos con `*:w-72`              |
+| ¿**`grid`** o **`flex`**?                       | `grid` = columnas exactas, filas completas. `flex flex-wrap justify-center` = la última fila incompleta queda centrada       |
+| ¿Cómo **centro** esto?                          | Texto o elemento en línea → `text-center` (en el padre). Bloque con ancho → `mx-auto`. Hijos de un `flex` → `justify-center` |
+| ¿Por qué se **estira** tanto?                   | Falta un límite: `max-w-4xl mx-auto`                                                                                         |
 
 Diagnóstico rápido cuando una clase "no hace nada": ¿la clase existe (IntelliSense muestra el CSS)? →
 ¿está en el elemento correcto (padre/hijo)? → ¿falta su pareja (`grid` + `grid-cols-N`, `border` + color)
@@ -334,7 +350,9 @@ o su prefijo (`hover:`, `md:`)? → ¿el valor es suficientemente grande?
 
 ```astro
 <section id="servicios" class="py-8 px-4 bg-fondo scroll-mt-20">
-	<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">Título</h2>
+	<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
+		Título
+	</h2>
 	<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
 	<!-- contenido -->
 </section>
@@ -344,7 +362,9 @@ o su prefijo (`hover:`, `md:`)? → ¿el valor es suficientemente grande?
 
 ```astro
 <div class="grid gap-4 grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto">
-	{members.map((member) => <TeamCard {...member} />)}
+	{members.map((member) => (
+		<TeamCard {...member} />
+	))}
 </div>
 ```
 
@@ -354,7 +374,9 @@ Elegir columnas según la cantidad: con 6 elementos, 2, 3 y 6 columnas dan filas
 
 ```astro
 <div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto *:w-full sm:*:w-72">
-	{services.map((service) => <ServiceCard {...service} />)}
+	{services.map((service) => (
+		<ServiceCard {...service} />
+	))}
 </div>
 ```
 
@@ -364,10 +386,17 @@ de una fila quedan iguales aunque el texto tenga largos distintos.
 ### Tarjeta con foto pequeña centrada
 
 ```astro
-<article class="p-4 text-center bg-white border border-secundario/30 rounded-lg shadow-sm
-	transition hover:-translate-y-1 hover:border-acento">
-	<Image src={photo} alt={`Foto de ${name}`} width={224} height={288}
-		class="w-28 h-36 mx-auto mb-3 rounded-md object-cover object-top" />
+<article
+	class="p-4 text-center bg-white border border-secundario/30 rounded-lg shadow-sm
+	transition hover:-translate-y-1 hover:border-acento"
+>
+	<Image
+		src={photo}
+		alt={`Foto de ${name}`}
+		width={224}
+		height={288}
+		class="w-28 h-36 mx-auto mb-3 rounded-md object-cover object-top"
+	/>
 	<h3 class="font-semibold text-primario font-titulos">{name}</h3>
 	<div class="w-10 h-0.5 bg-acento mx-auto my-2" aria-hidden="true"></div>
 	<p class="text-sm text-slate-600">{title}</p>
@@ -396,10 +425,10 @@ de una fila quedan iguales aunque el texto tenga largos distintos.
 
 ---
 
-## Para reutilizar en el proyecto del cliente
+## Para reutilizar en otros proyecto
 
 1. `nvm use` + `npm create astro@latest -- --template minimal`.
 2. Copiar `.gitignore`, `.nvmrc`, `.prettierignore`, `prettier.config.mjs`, `.vscode/extensions.json`.
 3. Instalar Prettier y Tailwind **antes del primer commit**, luego `npm run format`.
 4. Copiar `BaseLayout.astro` y adaptar `title` / `description`.
-5. Token de GitHub nuevo, limitado al repo del proyecto del cliente.
+5. Token de GitHub nuevo, limitado al repo del nuevo proyecto.

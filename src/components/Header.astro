@@ -42,21 +42,48 @@ import Logo from './Logo.astro'
 						Inicio
 					</a>
 				</li>
-				<li>
-					<a
-						href="/#nosotros"
-						class="text-primario hover:underline decoration-acento decoration-2 underline-offset-4"
+				<!-- Desplegable: en celular se abre hacia abajo; desde md flota sobre la página -->
+				<li class="relative">
+					<button
+						id="nosotros-boton"
+						type="button"
+						class="group flex items-center gap-1 text-primario cursor-pointer hover:underline decoration-acento decoration-2 underline-offset-4"
+						aria-expanded="false"
+						aria-controls="nosotros-submenu"
 					>
 						Nosotros
-					</a>
-				</li>
-				<li>
-					<a
-						href="/#equipo"
-						class="text-primario hover:underline decoration-acento decoration-2 underline-offset-4"
+						<svg
+							class="size-4 transition group-aria-expanded:rotate-180"
+							viewBox="0 0 20 20"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							aria-hidden="true"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M5 8l5 5 5-5"></path>
+						</svg>
+					</button>
+					<ul
+						id="nosotros-submenu"
+						class="hidden space-y-3 pt-3 pl-4 md:absolute md:left-0 md:top-full md:mt-2 md:w-44 md:p-3 md:bg-white md:border md:border-slate-200 md:rounded-md md:shadow-md"
 					>
-						Equipo
-					</a>
+						<li>
+							<a
+								href="/#nosotros"
+								class="text-primario hover:underline decoration-acento decoration-2 underline-offset-4"
+							>
+								Quiénes somos
+							</a>
+						</li>
+						<li>
+							<a
+								href="/#equipo"
+								class="text-primario hover:underline decoration-acento decoration-2 underline-offset-4"
+							>
+								Equipo
+							</a>
+						</li>
+					</ul>
 				</li>
 				<li>
 					<a
@@ -80,11 +107,13 @@ import Logo from './Logo.astro'
 </header>
 
 <script>
-	// Este código sí se envía al navegador (Astro lo procesa y lo optimiza).
+	import { fade } from 'astro:transitions'
+
+	// Menu Hamburguesa
 	const boton = document.querySelector('#menu-boton')
 	const menu = document.querySelector('#menu')
 
-	// Solo si los dos elementos existen (evita errores si cambia un id)
+	// Solo si los dos elementos existen
 	if (boton && menu) {
 		// Al hacer clic en el botón: mostrar u ocultar el menú
 		boton.addEventListener('click', () => {
@@ -100,6 +129,46 @@ import Logo from './Logo.astro'
 				menu.classList.add('hidden')
 				boton.setAttribute('aria-expanded', 'false')
 			})
+		})
+	}
+
+	// Desplegable "Nosotros" (SubMenu)
+	const botonNosotros = document.querySelector('#nosotros-boton')
+	const submenuNosotros = document.querySelector('#nosotros-submenu')
+
+	// Solo si los dos elementos existen
+	if (botonNosotros && submenuNosotros) {
+		const cerrarSubmenu = () => {
+			submenuNosotros.classList.add('hidden')
+			botonNosotros.setAttribute('aria-expanded', 'false')
+		}
+
+		// Al hacer clic en el botón: mostrar u ocultar el submenú
+		botonNosotros.addEventListener('click', () => {
+			const submenuOculto = submenuNosotros.classList.toggle('hidden')
+			botonNosotros.setAttribute('aria-expanded', String(!submenuOculto))
+		})
+
+		// Al tocar un enlace del menú: cerrar el submenú
+		submenuNosotros.querySelectorAll('a').forEach((enlace) => {
+			enlace.addEventListener('click', () => {
+				cerrarSubmenu()
+			})
+		})
+
+		//Cerrar el submenú al presionar Escape
+		document.addEventListener('keydown', (evento) => {
+			if (evento.key === 'Escape') {
+				cerrarSubmenu()
+			}
+		})
+
+		//Cerrar el submenú al hacer clic fuera del botón y del submenú
+		document.addEventListener('click', (evento) => {
+			const objetivo = evento.target as Node //es el elemento donde se hizo clic
+			if (!botonNosotros.contains(objetivo) && !submenuNosotros.contains(objetivo)) {
+				cerrarSubmenu()
+			}
 		})
 	}
 </script>

@@ -72,4 +72,9 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       (sticky top-0 z-10, enlaces `/#id`, `scroll-smooth` + `scroll-mt-20`), `Logo.astro` (SVG inline con
       tokens) y favicon SVG. Menú hamburguesa: botón `md:hidden` + `aria-expanded`, menú
       `hidden md:block`, `<script>` con `classList.toggle`.
-- [ ] Lección 7 — incluye: sección Equipo + extra del menú desplegable "Nosotros" (Quiénes somos + Equipo)
+- [x] Lección 7 (2026-11-04): `src/data/services.ts` y `teams.ts` (interfaz + lista), `.map()` con `{...item}`,
+      `TeamCard.astro`, sección Equipo, grilla con última fila centrada (`flex flex-wrap justify-center`).
+      Extra: desplegable "Nosotros" con `aria-expanded`, cierre con Escape y clic fuera.
+      Proyecto movido a `~/RepositoriosGit` (fuera de iCloud).
+- [ ] Lección 8 — en curso: `<Image />` y fotos en `src/assets/team/` hechas. Pendiente: decidir sobre las fotos
+      (licencia libre), nombres de archivo en kebab-case, títulos en femenino, mini ejercicio.
