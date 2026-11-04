@@ -75,6 +75,8 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 - [x] Lección 7 (2026-11-04): `src/data/services.ts` y `teams.ts` (interfaz + lista), `.map()` con `{...item}`,
       `TeamCard.astro`, sección Equipo, grilla con última fila centrada (`flex flex-wrap justify-center`).
       Extra: desplegable "Nosotros" con `aria-expanded`, cierre con Escape y clic fuera.
-      Proyecto movido a `~/RepositoriosGit` (fuera de iCloud).
-- [ ] Lección 8 — en curso: `<Image />` y fotos en `src/assets/team/` hechas. Pendiente: decidir sobre las fotos
-      (licencia libre), nombres de archivo en kebab-case, títulos en femenino, mini ejercicio.
+- [x] Lección 8 (2026-11-04): `<Image />` de `astro:assets` en `TeamCard`, fotos en `src/assets/team/` importadas
+      en `teams.ts` (`ImageMetadata`), `alt`, `object-cover`. 6 fotos: 356 KB → 64 KB.
+- [x] Lección 9 (2026-11-04): `src/data/contact.ts` (objeto `contact` + `mailtoUrl` y `whatsappUrl` con
+      `encodeURIComponent`), dos botones `<a>` en la sección Contacto, `target="_blank"` solo en WhatsApp.
+- [ ] Lección 10

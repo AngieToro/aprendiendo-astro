@@ -56,7 +56,13 @@ aprendiendo-astro/
 │   ├── components/
 │   │   ├── ServiceCard.astro    ← tarjeta de servicio (props: icon, title, description)
 │   │   ├── Header.astro         ← logo + menú de anclas + hamburguesa (con <script>)
+│   │   ├── TeamCard.astro       ← tarjeta de persona con foto optimizada
 │   │   └── Logo.astro           ← ícono SVG + nombre (usa tokens de color)
+│   ├── data/
+│   │   ├── services.ts          ← lista de servicios
+│   │   ├── teams.ts             ← lista del equipo
+│   │   └── contact.ts           ← correo, WhatsApp y sus URL (mailtoUrl, whatsappUrl)
+│   ├── assets/team/             ← fotos que Astro optimiza
 │   └── styles/
 │       └── global.css           ← carga Tailwind + tokens de marca (@theme)
 ├── public/                      ← se copia tal cual al sitio (favicon.svg, PDFs)
@@ -197,6 +203,14 @@ name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
   `teams.ts`.
 - En `Header.astro`, "Nosotros" es un desplegable (Quiénes somos + Equipo) con su `<script>`.
 
+### 9. Contacto: correo y WhatsApp (lección 9)
+
+No se instala nada: son enlaces normales.
+
+- `src/data/contact.ts`: objeto `contact` con los datos, y `mailtoUrl` / `whatsappUrl` calculadas a partir de él.
+- `index.astro` importa las dos URL y las usa en dos `<a>` dentro de un padre `flex flex-wrap justify-center gap-4`.
+- Para el proyecto del cliente: cambiar solo los datos del objeto `contact` y probar los dos botones.
+
 ---
 
 ## Tips importantes
@@ -295,6 +309,23 @@ name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
   lista: flota en escritorio y empuja en celular. Debe cerrarse con Escape y con clic fuera (escuchadores en
   `document`), excluyendo el botón con `.contains()`. Flecha sin JS: `group` + `group-aria-expanded:rotate-180`.
 - Repetir la misma lógica 3 veces = sacarla a una función (`cerrarSubmenu`). Con paréntesis se ejecuta.
+
+### Contacto (mailto y WhatsApp)
+
+- Correo: `mailto:correo?subject=...`. WhatsApp: `https://wa.me/NUMERO?text=...`.
+- El número de `wa.me` va solo con dígitos: código de país, sin `+`, espacios ni guiones.
+- `encodeURIComponent` es obligatorio en textos dentro de una URL: convierte espacios, tildes y símbolos. Sin él,
+  un `&` en el mensaje lo cortaría, porque en una URL `&` separa parámetros.
+- En un template string las variables se escriben `${variable}`. Sin el `$` queda texto literal y no hay error:
+  para comprobarlo, pasar el mouse por el botón y mirar la URL en la esquina del navegador.
+- `target="_blank"` + `rel="noopener noreferrer"` en WhatsApp (es una página web). No en `mailto:`, que abre la app
+  de correo.
+- Un botón es un `<a>` con estilos, no una `<table>`: la tabla es para datos, y el color debe estar en el `<a>`
+  para que toda la zona sea clicable.
+- Un número ficticio da error en WhatsApp aunque el enlace esté bien. Para probar, usar uno real temporalmente y
+  quitarlo antes del commit, sin dejarlo comentado: Git también guarda los comentarios.
+- `.env` es para secretos o valores que cambian por ambiente. Lo que se ve en el sitio publicado puede ir en un
+  archivo de datos versionado.
 
 ### Prettier
 

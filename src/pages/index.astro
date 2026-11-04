@@ -4,6 +4,8 @@ import ServiceCard from '../components/ServiceCard.astro'
 import TeamCard from '../components/TeamCard.astro'
 import { services } from '../data/services.ts'
 import { members } from '../data/teams.ts'
+import { mailtoUrl, whatsappUrl } from '../data/contact.ts'
+
 const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
 
@@ -54,6 +56,22 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 			Contáctanos
 		</h2>
 		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
-		<p class="max-w-2xl mx-auto text-center text-slate-600">Escríbenos por correo o WhatsApp.</p>
+		<p class="max-w-2xl mx-auto text-center text-slate-600">Escríbenos</p>
+		<div class="flex flex-wrap justify-center gap-4 mt-6">
+			<a
+				href={mailtoUrl}
+				class="px-6 py-3 rounded-md font-bold bg-primario text-white shadow-sm hover:bg-primario-hover transition"
+			>
+				Enviar Correo
+			</a>
+			<a
+				href={whatsappUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="px-6 py-3 rounded-md font-bold bg-acento text-primario shadow-sm hover:opacity-90 transition"
+			>
+				Escribir por WhatsApp
+			</a>
+		</div>
 	</section>
 </BaseLayout>
