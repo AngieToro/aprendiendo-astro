@@ -9,16 +9,36 @@ interface Props {
 }
 
 const { description, title } = Astro.props
+
+// URL completa de esta página: dominio (site en astro.config.mjs) + ruta actual
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
+const ogImageUrl = new URL('/og-image.png', Astro.site)
 ---
 
 <html lang="es" class="scroll-smooth">
 	<head>
 		<meta charset="utf-8" />
+		{/* ícono de la pestaña (favicon) */}
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		{/* Google los muestra en sus resultados  (title, description)*/}
 		<meta name="description" content={description} />
 		<title>{title}</title>
+		{/* Dirección oficial de la página */}
+		<link rel="canonical" href={canonicalUrl} />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		{/* Open Graph (og:type, og:site_name, og:title, og:description, og:url)
+		La tarjeta que aparece al compartir el enlace en WhatsApp o LinkedIn  */}
+		<meta property="og:type" content="website" />
+		{/* content debe ser fijo */}
+		<meta property="og:site_name" content="TestCorp" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:image:alt" content="Logo de TestCorp con el texto Visualiza tu negocio" />
+		<meta name="twitter:card" content="summary_large_image" />
 		<Font cssVariable="--font-poppins" preload />
 		<Font cssVariable="--font-open-sans" />
 	</head>

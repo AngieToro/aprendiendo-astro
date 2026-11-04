@@ -1,0 +1,9 @@
+# Dice quien puede pasar y donde esta el directorio. Es lo primero que un buscador busca en un sitio
+
+# Regla aplica a todos los buscadores
+User-agent: *
+# Pueden revisar todo el sitio (todas las paginas)
+Allow: /
+
+# Lista de paginas. Debe ser la URL completa
+Sitemap: https://testcorp.example/sitemap-index.xml
