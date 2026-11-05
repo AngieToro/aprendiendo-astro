@@ -41,10 +41,9 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 8. Imágenes optimizadas con `astro:assets`; textos alternativos.
 9. Contacto: botones mailto y WhatsApp (`wa.me`).
 10. SEO: title, description, Open Graph, favicon, sitemap, robots.txt; auditoría Lighthouse.
-11. Deploy: conectar GitHub a Cloudflare Pages (o Netlify), dominio de prueba, HTTPS.
+11. Deploy: conectar GitHub a Cloudflare Workers (recomendado hoy para proyectos nuevos), dominio de prueba, HTTPS.
 12. Repaso: qué reutilizo para el proyecto del cliente y qué haría distinto.
-13. (Extra, después del repaso) CMS headless sobre los archivos de datos (ej. Decap CMS, Pages CMS o
-    TinaCMS) para que un cliente edite contenido sin código. Decisión actual: mantenimiento con Git (opción A).
+13. CMS headless sobre los archivos de datos (ej. Decap CMS, Pages CMS o TinaCMS) para que un cliente edite contenido sin código. Decisión actual: mantenimiento con Git (opción A).
 
 ## Progreso
 
@@ -81,5 +80,5 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       `encodeURIComponent`), dos botones `<a>` en la sección Contacto, `target="_blank"` solo en WhatsApp.
 - [x] Lección 10 (2026-11-05): `site`, canonical, Open Graph, `public/og-image.png`, `@astrojs/sitemap`,
       `public/robots.txt`, `<main>` en `BaseLayout`. Lighthouse sobre `preview`: 100 en las cuatro categorías, en
-      Mobile y Desktop. Pendiente en lección 11: cambiar el dominio en `astro.config.mjs` y `robots.txt`.
+      Mobile y Desktop.
 - [ ] Lección 11

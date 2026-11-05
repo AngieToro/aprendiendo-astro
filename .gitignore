@@ -11,6 +11,9 @@ dist/
 .env
 .env.*
 
+# Wrangler (Cloudflare)
+.wrangler/
+
 # IDEs (configuración personal del editor)
 .vscode/*
 !.vscode/extensions.json
