@@ -79,4 +79,7 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       en `teams.ts` (`ImageMetadata`), `alt`, `object-cover`. 6 fotos: 356 KB → 64 KB.
 - [x] Lección 9 (2026-11-04): `src/data/contact.ts` (objeto `contact` + `mailtoUrl` y `whatsappUrl` con
       `encodeURIComponent`), dos botones `<a>` en la sección Contacto, `target="_blank"` solo en WhatsApp.
-- [ ] Lección 10
+- [x] Lección 10 (2026-11-05): `site`, canonical, Open Graph, `public/og-image.png`, `@astrojs/sitemap`,
+      `public/robots.txt`, `<main>` en `BaseLayout`. Lighthouse sobre `preview`: 100 en las cuatro categorías, en
+      Mobile y Desktop. Pendiente en lección 11: cambiar el dominio en `astro.config.mjs` y `robots.txt`.
+- [ ] Lección 11

@@ -44,7 +44,9 @@ const ogImageUrl = new URL('/og-image.png', Astro.site)
 	</head>
 	<body class="bg-white text-slate-900">
 		<Header />
-		<slot />
+		<main>
+			<slot />
+		</main>
 		<footer class="mt-8 px-4 py-6 text-sm border-t border-slate-200 text-right text-slate-600">
 			<p>2026 TestCorp</p>
 		</footer>

@@ -65,7 +65,7 @@ aprendiendo-astro/
 │   ├── assets/team/             ← fotos que Astro optimiza
 │   └── styles/
 │       └── global.css           ← carga Tailwind + tokens de marca (@theme)
-├── public/                      ← se copia tal cual al sitio (favicon.svg, PDFs)
+├── public/                      ← se copia tal cual al sitio (favicon.svg, og-image.png, robots.txt)
 ├── docs/
 │   └── tailwind-referencia.xlsx ← referencia de clases Tailwind (solo local, no se versiona)
 ├── astro.config.mjs             ← configuración de Astro (plugin de Tailwind y fuentes)
@@ -211,6 +211,67 @@ No se instala nada: son enlaces normales.
 - `index.astro` importa las dos URL y las usa en dos `<a>` dentro de un padre `flex flex-wrap justify-center gap-4`.
 - Para el proyecto del cliente: cambiar solo los datos del objeto `contact` y probar los dos botones.
 
+### 10. SEO (lección 10)
+
+1. `site` en `astro.config.mjs`: URL pública del sitio. Es necesaria para las URL completas y el sitemap.
+2. En `BaseLayout.astro`: URL canónica, etiquetas Open Graph, imagen para compartir y `twitter:card`.
+3. Imagen para compartir: `public/og-image.png`, de 1200 × 630 px.
+4. Sitemap con la integración oficial (instala `@astrojs/sitemap` y lo agrega a `astro.config.mjs`):
+
+   ```bash
+   npx astro add sitemap
+   npm run format
+   ```
+
+   `format` hace falta porque `astro add` no respeta el estilo de Prettier.
+
+5. `<link rel="sitemap" href="/sitemap-index.xml" />` en el `<head>`.
+6. `public/robots.txt` con las reglas y la URL del sitemap.
+
+Al publicar con el dominio definitivo, cambiarlo en **dos lugares**: `site` en `astro.config.mjs` y la línea
+`Sitemap:` de `public/robots.txt`, que es texto fijo.
+
+#### Auditoría con Lighthouse
+
+Lighthouse es la herramienta de auditoría de Google, gratuita y de código abierto. Viene incluida en Chrome, así
+que no se instala nada. Analiza una página, le da un puntaje de 0 a 100 en cuatro categorías y lista qué corregir.
+
+| Categoría      | Qué revisa                                           |
+| -------------- | ---------------------------------------------------- |
+| Performance    | Qué tan rápido carga                                 |
+| Accessibility  | Contraste, textos `alt`, orden de títulos, landmarks |
+| Best Practices | Seguridad y errores en consola                       |
+| SEO            | `title`, `description`, enlaces y `robots.txt`       |
+
+Colores del puntaje: verde (90 a 100) es bueno, naranja (50 a 89) es mejorable y rojo (0 a 49) es un problema.
+
+Cómo correrla:
+
+1. Generar el sitio final y levantarlo (`build` crea `dist/`, `preview` lo muestra como quedará publicado):
+
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+2. Abrir `http://localhost:4321/` en una ventana de incógnito (`Cmd + Shift + N`), para que las extensiones no
+   alteren el resultado.
+3. Abrir DevTools (`Cmd + Option + I`) y entrar en la pestaña **Lighthouse** (si no aparece, está en `>>`).
+4. Elegir **Mode:** Navigation, **Device:** Mobile y las cuatro categorías.
+5. Hacer clic en **Analyze page load** y esperar, sin cambiar de pestaña.
+6. Repetir con **Device:** Desktop.
+7. Abrir cada categoría que no tenga 100, corregir, y repetir desde el paso 1.
+
+Qué tener en cuenta:
+
+- No usar `npm run dev`: entrega código sin optimizar y los puntajes salen mucho más bajos. En este proyecto, con
+  `dev` quedó todo bajo 50 y con `preview` llegó a 98-100.
+- Performance varía entre pruebas, porque depende del computador. La medición definitiva es la del sitio publicado.
+- Si `canonical` apunta a otro dominio, puede salir un aviso en local que se resuelve con el dominio definitivo.
+- Un 100 en Accessibility no reemplaza probar con teclado o lector de pantalla: solo cubre revisiones automáticas.
+
+Resultado de este proyecto: 100 en las cuatro categorías, en Mobile y Desktop.
+
 ---
 
 ## Tips importantes
@@ -326,6 +387,26 @@ No se instala nada: son enlaces normales.
   quitarlo antes del commit, sin dejarlo comentado: Git también guarda los comentarios.
 - `.env` es para secretos o valores que cambian por ambiente. Lo que se ve en el sitio publicado puede ir en un
   archivo de datos versionado.
+
+### SEO
+
+- Open Graph usa `property` y URL completas: WhatsApp y LinkedIn leen la página desde sus servidores.
+- Comillas = texto literal; llaves = valor de la variable. `content="canonicalUrl"` publica esa palabra, sin error.
+- `og:site_name` es fijo (nombre del sitio); `og:title` cambia en cada página. Probar también la 404.
+- `new URL(ruta, Astro.site)` arma URL completas, y se actualizan solas si cambia `site`.
+- `og:image` va en `public/` (dirección fija), en PNG o JPG de 1200 × 630 px, con el texto importante al centro.
+- Texto suelto dentro de `<head>`, aunque sea un `.`, cierra el `<head>` y deja lo siguiente en `<body>`. No da
+  error. Para comprobarlo, en la consola:
+  `document.head.querySelectorAll('meta[property^="og:"]').length`
+- "Ver código fuente" muestra el HTML recibido; Elements muestra cómo lo interpretó el navegador.
+- `<!-- -->` llega al HTML publicado; `{/* */}` no. Los comentarios van arriba de la línea que explican.
+- El sitemap lo genera Astro en el build: no existe con `npm run dev`, se ve con `npm run build` + `npm run preview`.
+- `robots.txt` es una petición a los buscadores, no una protección.
+- Lighthouse se corre sobre `preview`, en incógnito, primero en Mobile. Sobre 90 es bueno. Con `dev` los puntajes no
+  sirven: entrega código sin optimizar y herramientas de desarrollo.
+- Un solo `<main>` por página, en `BaseLayout` alrededor de `<slot />`: permite saltar al contenido con lector de
+  pantalla. Sin él, Lighthouse avisa "Document does not have a main landmark".
+- Después de aceptar una sugerencia de VS Code, revisar los imports: puede agregar alguno que no se usa.
 
 ### Prettier
 
