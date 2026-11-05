@@ -1,5 +1,5 @@
 // Servicios que ofrece TestCorp. Para agregar, quitar o editar un servicio, se cambia solo esta lista:
-// index.astro la recorre con .map() y dibuja una tarjeta (ServiceCard) por cada elemento.
+// index.astro la recorre con .map() y dibuja una tarjeta (InfoCard) por cada elemento.
 
 export interface Service {
 	icon: string

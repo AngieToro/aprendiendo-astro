@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import ServiceCard from '../components/ServiceCard.astro'
+import InfoCard from '../components/InfoCard.astro'
 import TeamCard from '../components/TeamCard.astro'
+import SectionTitle from '../components/SectionTitle.astro'
 import { services } from '../data/services.ts'
 import { members } from '../data/teams.ts'
 import { mailtoUrl, whatsappUrl } from '../data/contact.ts'
+import { purpose, values } from '../data/values.ts'
 
 const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
@@ -18,20 +20,29 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 	</section>
 
 	<section id="nosotros" class="py-8 px-4 scroll-mt-20">
-		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
-			Quiénes somos
-		</h2>
-		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
+		<SectionTitle title="Quiénes somos" />
 		<p class="max-w-2xl mx-auto text-center text-slate-600">
 			Somos un equipo de consultores TI que acompaña a pymes en su transformación digital.
 		</p>
 	</section>
 
+	<section id="mision" class="py-8 px-4 scroll-mt-20">
+		<SectionTitle title="Misión, visión y valores" />
+		<div class="grid gap-4 md:grid-cols-2 max-w-4xl mx-auto mb-4">
+			{purpose.map((item) => (
+				<InfoCard {...item} />
+			))}
+		</div>
+		<h3 class="text-center font-semibold text-primario font-titulos mt-8 mb-4">Valores</h3>
+		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto">
+			{values.map((value) => (
+				<InfoCard {...value} />
+			))}
+		</div>
+	</section>
+
 	<section id="equipo" class="py-8 px-4 scroll-mt-20">
-		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
-			Equipo
-		</h2>
-		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
+		<SectionTitle title="Equipo" />
 		<div class="grid gap-4 grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto">
 			{members.map((member) => (
 				<TeamCard {...member} />
@@ -40,22 +51,16 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 	</section>
 
 	<section id="servicios" class="py-8 px-4 bg-fondo scroll-mt-20">
-		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
-			Nuestros servicios
-		</h2>
-		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
+		<SectionTitle title="Nuestros servicios" />
 		<div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto *:w-full sm:*:w-72">
 			{services.map((service) => (
-				<ServiceCard {...service} />
+				<InfoCard {...service} />
 			))}
 		</div>
 	</section>
 
 	<section id="contacto" class="py-8 px-4 scroll-mt-20">
-		<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
-			Contáctanos
-		</h2>
-		<div class="w-16 h-1 bg-acento mx-auto mb-8" aria-hidden="true"></div>
+		<SectionTitle title="Contáctanos" />
 		<p class="max-w-2xl mx-auto text-center text-slate-600">Escríbenos</p>
 		<div class="flex flex-wrap justify-center gap-4 mt-6">
 			<a

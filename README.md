@@ -54,7 +54,8 @@ aprendiendo-astro/
 │   ├── layouts/
 │   │   └── BaseLayout.astro     ← <html>, <head> y <body> comunes (props: title, description)
 │   ├── components/
-│   │   ├── ServiceCard.astro    ← tarjeta de servicio (props: icon, title, description)
+│   │   ├── InfoCard.astro       ← tarjeta con ícono, título y texto (servicios, valores)
+│   │   ├── SectionTitle.astro   ← título de sección: h2 + línea de acento (prop: title)
 │   │   ├── Header.astro         ← logo + menú de anclas + hamburguesa (con <script>)
 │   │   ├── TeamCard.astro       ← tarjeta de persona con foto optimizada
 │   │   └── Logo.astro           ← ícono SVG + nombre (usa tokens de color)
@@ -354,6 +355,23 @@ con `git push` no existe allá, aunque en el computador local funcione.
 
 Los nombres de los botones pueden variar, porque Cloudflare cambia su panel seguido.
 
+#### Dominio propio (para el proyecto del cliente)
+
+Lo único que se paga es el dominio, cada año. El hosting sigue en el plan gratuito y la conexión con GitHub no cambia:
+cada `git push` a `main` sigue publicando.
+
+1. Comprar el dominio. Cloudflare Registrar lo vende a precio de costo y sirve para `.com`. Si se compra en otro lado
+   (por ejemplo, un `.cl` en NIC Chile), hay que apuntar sus nameservers a Cloudflare.
+2. Agregar el dominio a Cloudflare, si no se compró ahí: debe quedar como zona activa.
+3. En el Worker, ir a **Settings** → **Domains & Routes** → **Add** → **Custom Domain** y escribir el dominio.
+   Cloudflare crea el certificado HTTPS.
+4. Cambiar la URL en `site` de `astro.config.mjs` y en la línea `Sitemap:` de `public/robots.txt`.
+5. Activar **Always Use HTTPS**.
+
+`ejemplo.com` y `www.ejemplo.com` son direcciones distintas: para que `www` funcione, hay que configurar una redirección.
+
+El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, para que no dependan de quien hizo el sitio.
+
 ---
 
 ## Tips importantes
@@ -383,7 +401,7 @@ Los nombres de los botones pueden variar, porque Cloudflare cambia su panel segu
 - `src/pages/` = rutas: `servicios.astro` → `/servicios`. `404.astro` → `404.html`.
 - Frontmatter (`---`) corre en el **build**, nunca en el navegador. La plantilla usa `{variables}`.
 - Los imports de `.astro` llevan **la extensión** y van **sin llaves** (export por defecto):
-  `import ServiceCard from '../components/ServiceCard.astro'`.
+  `import InfoCard from '../components/InfoCard.astro'`.
 - Props: se definen con `interface Props`, se leen con `Astro.props` (p minúscula). Opcional = `?`.
 - `<slot />` recibe lo que va **entre** `<Componente>` y `</Componente>`. `<Componente />` no pasa contenido.
 - Cada componente tiene su propio alcance: el `title` del layout y el de la tarjeta no chocan.
@@ -583,7 +601,7 @@ Elegir columnas según la cantidad: con 6 elementos, 2, 3 y 6 columnas dan filas
 ```astro
 <div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto *:w-full sm:*:w-72">
 	{services.map((service) => (
-		<ServiceCard {...service} />
+		<InfoCard {...service} />
 	))}
 </div>
 ```
@@ -633,10 +651,41 @@ de una fila quedan iguales aunque el texto tenga largos distintos.
 
 ---
 
-## Para reutilizar en otros proyecto
+## Para reutilizar en otros proyectos
+
+### 1. Crear el proyecto
 
 1. `nvm use` + `npm create astro@latest -- --template minimal`.
 2. Copiar `.gitignore`, `.nvmrc`, `.prettierignore`, `prettier.config.mjs`, `.vscode/extensions.json`.
 3. Instalar Prettier y Tailwind **antes del primer commit**, luego `npm run format`.
-4. Copiar `BaseLayout.astro` y adaptar `title` / `description`.
-5. Token de GitHub nuevo, limitado al repo del nuevo proyecto.
+4. Token de GitHub nuevo, limitado al repo del nuevo proyecto. Repo privado si tiene datos del cliente.
+
+### 2. Qué se reutiliza
+
+| Pieza                                                    | Qué hacer                                            |
+| -------------------------------------------------------- | ---------------------------------------------------- |
+| `BaseLayout.astro`                                       | Copiar. Cambiar `og:site_name` y el texto del footer |
+| `Header.astro`                                           | Copiar. Cambiar los enlaces según las secciones      |
+| `InfoCard.astro`, `SectionTitle.astro`, `TeamCard.astro` | Copiar. Ajustar los campos si el cliente pide otros  |
+| `src/data/*.ts`                                          | Copiar la estructura. Reemplazar los datos           |
+| `src/styles/global.css`                                  | Copiar. Cambiar colores y revisar su contraste       |
+| Fuentes en `astro.config.mjs`                            | Copiar. Cambiar por las fuentes de la marca          |
+| `Logo.astro`, `favicon.svg`, `og-image.png`              | Reemplazar por los del cliente                       |
+| `wrangler.jsonc`                                         | Copiar. Cambiar `name` y `compatibility_date`        |
+| `public/robots.txt`                                      | Copiar. Cambiar el dominio                           |
+
+### 3. Secciones nuevas del proyecto del cliente
+
+Otros módulos que no existen en este proyecto. Se arman con el mismo patrón: datos en `src/data/`,
+un componente de tarjeta, `.map()` y un `id` para el menú.
+
+### 4. Antes de publicar
+
+- Textos, fotos autorizadas y `alt` del cliente.
+- `title` y `description` propios de cada página.
+- Correo y WhatsApp reales en `contact.ts`, y probar los dos botones.
+- `npm run format` y `npm run build` sin errores.
+- Lighthouse sobre `preview`, y de nuevo en el sitio publicado.
+- URL real en `site` y `robots.txt`.
+- Probar la 404 y la tarjeta al compartir.
+- Dominio y cuenta de Cloudflare a nombre del cliente.

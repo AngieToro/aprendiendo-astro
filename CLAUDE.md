@@ -81,5 +81,7 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
 - [x] Lección 10 (2026-11-05): `site`, canonical, Open Graph, `public/og-image.png`, `@astrojs/sitemap`,
       `public/robots.txt`, `<main>` en `BaseLayout`. Lighthouse sobre `preview`: 100 en las cuatro categorías, en
       Mobile y Desktop.
-- [x] Lección 11 (en curso, 2026-11-05): Wrangler + `wrangler.jsonc`, repo conectado a Cloudflare Workers, sitio en
-      https://aprendiendo-astro-testcorp.angelicatoro88.workers.dev, URL real en `site` y `robots.txt`.
+- [x] Lección 11 (2026-11-05): Wrangler + `wrangler.jsonc`, repo conectado a Cloudflare Workers (deploy automático con
+      `git push` a `main`), sitio en https://aprendiendo-astro-testcorp.angelicatoro88.workers.dev, URL real en `site` y
+      `robots.txt`. Lighthouse en el sitio publicado: 100 en Mobile y Desktop. Tarjeta al compartir comprobada.
+- [ ] Lección 12
