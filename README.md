@@ -272,6 +272,88 @@ Qué tener en cuenta:
 
 Resultado de este proyecto: 100 en las cuatro categorías, en Mobile y Desktop.
 
+### 11. Deploy en Cloudflare Workers (lección 11)
+
+Cloudflare se conecta al repo de GitHub y, desde entonces, cada `git push` a `main` publica el sitio solo:
+
+```text
+git push → GitHub avisa a Cloudflare → Cloudflare corre el build → publica dist/
+```
+
+Se usa Workers y no Pages porque es lo que Cloudflare recomienda hoy para proyectos nuevos. El HTTPS viene incluido.
+Un sitio estático no necesita el adaptador `@astrojs/cloudflare`.
+
+#### Preparar el proyecto
+
+1. Instalar Wrangler, la herramienta oficial de Cloudflare para publicar (queda como dependencia de desarrollo):
+
+   ```bash
+   npm install wrangler@latest --save-dev
+   ```
+
+2. Crear `wrangler.jsonc` en la raíz, con `name`, `compatibility_date` y `assets`:
+
+   ```jsonc
+   {
+   	"name": "nombre-del-proyecto",
+   	"compatibility_date": "AAAA-MM-DD",
+   	"assets": {
+   		"directory": "./dist",
+   		"not_found_handling": "404-page",
+   	},
+   }
+   ```
+
+   - `name`: aparece en la URL. Solo minúsculas y guiones.
+   - `compatibility_date`: la fecha del primer deploy.
+   - `not_found_handling`: muestra la página 404 cuando una URL no existe.
+
+3. Agregar `.wrangler/` a `.gitignore` (carpeta temporal de Wrangler).
+4. Probar sin publicar nada (hace todo el proceso menos el paso final):
+
+   ```bash
+   npm run build
+   npx wrangler deploy --dry-run
+   ```
+
+5. Subir los cambios con `git push`: Cloudflare lee `wrangler.jsonc` desde GitHub.
+
+#### A. Crear la cuenta
+
+1. Registrarse en [dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up).
+2. Confirmar el correo.
+
+#### B. Crear la aplicación
+
+1. En el panel, ir a **Compute** → **Workers & Pages**.
+2. Hacer clic en **Create application**.
+3. En **Import a repository**, conectar la cuenta de GitHub.
+4. Cuando GitHub pregunte a qué repositorios dar acceso, elegir **Only select repositories** y marcar solo el repo
+   del proyecto.
+5. De vuelta en Cloudflare, seleccionar ese repo.
+
+#### C. Configurar el build
+
+| Campo              | Valor                               |
+| ------------------ | ----------------------------------- |
+| **Project name**   | El mismo `name` de `wrangler.jsonc` |
+| **Build command**  | `npx astro build`                   |
+| **Deploy command** | `npx wrangler deploy`               |
+
+No hace falta agregar variables de entorno ni indicar la carpeta de salida: `dist` está en `wrangler.jsonc` y la
+versión de Node se toma de `.nvmrc`.
+
+#### D. Publicar
+
+1. Hacer clic en **Save and Deploy**.
+2. Esperar un par de minutos mientras se ve el registro del build.
+3. Al terminar, Cloudflare muestra la URL, que termina en `workers.dev`. Desde ese momento el sitio es público.
+
+Si el build falla, revisar las últimas líneas del registro. Cloudflare instala todo desde GitHub: lo que no se subió
+con `git push` no existe allá, aunque en el computador local funcione.
+
+Los nombres de los botones pueden variar, porque Cloudflare cambia su panel seguido.
+
 ---
 
 ## Tips importantes

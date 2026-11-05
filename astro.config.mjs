@@ -8,7 +8,8 @@ import sitemap from '@astrojs/sitemap'
 // https://astro.build/config
 export default defineConfig({
 	// URL pública del sitio. Provisoria: se cambia por la real en la lección 11 (deploy)
-	site: 'https://testcorp.example',
+	//site: 'https://testcorp.example',
+	site: 'https://aprendiendo-astro-testcorp.angelicatoro88.workers.dev/'
 
 	vite: {
 		plugins: [tailwindcss()],
