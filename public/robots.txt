@@ -6,5 +6,4 @@ User-agent: *
 Allow: /
 
 # Lista de paginas. Debe ser la URL completa
-# Sitemap: https://testcorp.example/sitemap-index.xml
 Sitemap: https://aprendiendo-astro-testcorp.angelicatoro88.workers.dev/sitemap-index.xml

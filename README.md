@@ -490,6 +490,20 @@ Los nombres de los botones pueden variar, porque Cloudflare cambia su panel segu
   pantalla. Sin él, Lighthouse avisa "Document does not have a main landmark".
 - Después de aceptar una sugerencia de VS Code, revisar los imports: puede agregar alguno que no se usa.
 
+### Deploy
+
+- Flujo para un cambio: crear una rama, editar, probar con `npm run format` y `npm run build`, y hacer el merge a
+  `main`. Al llegar a `main`, Cloudflare publica solo.
+- Si el build falla en Cloudflare, los visitantes siguen viendo la última versión que funcionó. La causa está en el
+  registro del build, en el panel del proyecto.
+- Los errores se leen buscando el archivo y la línea, pero el problema suele estar justo antes de la línea indicada.
+- Después del primer deploy, cambiar `site` y `robots.txt` por la URL real. Con un dominio que no existe, el sitio se
+  ve bien, pero la tarjeta al compartir sale sin imagen.
+- Sitio estático = se genera completo en el build, y Cloudflare solo entrega archivos: no necesita
+  `@astrojs/cloudflare`. Ese adaptador es para páginas que se generan en el servidor en cada visita.
+- Con dominio propio, activar **Always Use HTTPS** en Cloudflare para redirigir `http://` a `https://`.
+- Dar acceso solo al repo necesario, y definir quién es dueño de la cuenta de Cloudflare en proyectos de clientes.
+
 ### Prettier
 
 - Formatear al guardar solo afecta al archivo guardado: correr `npm run format:check` antes del commit.
