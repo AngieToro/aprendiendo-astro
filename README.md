@@ -355,6 +355,48 @@ con `git push` no existe allá, aunque en el computador local funcione.
 
 Los nombres de los botones pueden variar, porque Cloudflare cambia su panel seguido.
 
+#### Flujo para cada cambio
+
+`main` es lo que se publica. Los cambios se hacen en una rama y se unen cuando están probados.
+
+1. Crear la rama y cambiarse a ella:
+
+   ```bash
+   git switch -c feature/nombre-del-cambio
+   ```
+
+2. Hacer los cambios y verlos con `npm run dev`.
+3. Probar el resultado final, con Lighthouse si cambió el contenido:
+
+   ```bash
+   npm run format
+   npm run build
+   npm run preview
+   ```
+
+4. Guardar en la rama y subirla a GitHub (`-u` vincula la rama local con la remota):
+
+   ```bash
+   git add .
+   git commit -m "Descripcion del cambio"
+   git push -u origin feature/nombre-del-cambio
+   ```
+
+5. Pasar a producción (el último `push` dispara el deploy):
+
+   ```bash
+   git switch main
+   git merge feature/nombre-del-cambio
+   git push
+   ```
+
+6. Borrar la rama, en local y en GitHub (`-d` solo borra si ya está unida):
+
+   ```bash
+   git branch -d feature/nombre-del-cambio
+   git push origin --delete feature/nombre-del-cambio
+   ```
+
 #### Dominio propio (para el proyecto del cliente)
 
 Lo único que se paga es el dominio, cada año. El hosting sigue en el plan gratuito y la conexión con GitHub no cambia:
@@ -521,6 +563,15 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
   `@astrojs/cloudflare`. Ese adaptador es para páginas que se generan en el servidor en cada visita.
 - Con dominio propio, activar **Always Use HTTPS** en Cloudflare para redirigir `http://` a `https://`.
 - Dar acceso solo al repo necesario, y definir quién es dueño de la cuenta de Cloudflare en proyectos de clientes.
+
+### Componentes reutilizables
+
+- Unir componentes solo si tienen la misma forma y cambian por las mismas razones: `InfoCard` sirve para servicios y
+  valores; `TeamCard` queda aparte porque tiene foto y otros campos.
+- Nombrar un componente por lo que es (`InfoCard`), no por dónde se usa (`ServiceCard`).
+- Si un bloque se repite, sacarlo a un componente (`SectionTitle`): el cambio se hace en un solo lugar.
+- Renombrar con `git mv archivo-viejo archivo-nuevo`, para que Git lo registre como el mismo archivo.
+- Los datos guardan solo el contenido. Los espacios y el formato los decide el componente.
 
 ### Prettier
 

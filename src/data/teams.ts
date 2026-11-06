@@ -19,7 +19,7 @@ export const members: Member[] = [
 	{
 		photo: claire,
 		name: 'Claire Underwood',
-		title: 'Chief Executive Office (CEO)',
+		title: 'Chief Executive Officer (CEO)',
 		description: 'Ingeniero en Informática',
 	},
 	{

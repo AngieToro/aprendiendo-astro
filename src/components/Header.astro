@@ -162,16 +162,16 @@ import Logo from './Logo.astro'
 			})
 		})
 
-		//Cerrar el submenú al presionar Escape
+		// Cerrar el submenú al presionar Escape
 		document.addEventListener('keydown', (evento) => {
 			if (evento.key === 'Escape') {
 				cerrarSubmenu()
 			}
 		})
 
-		//Cerrar el submenú al hacer clic fuera del botón y del submenú
+		// Cerrar el submenú al hacer clic fuera del botón y del submenú
 		document.addEventListener('click', (evento) => {
-			const objetivo = evento.target as Node //es el elemento donde se hizo clic
+			const objetivo = evento.target as Node // es el elemento donde se hizo clic
 			if (!botonNosotros.contains(objetivo) && !submenuNosotros.contains(objetivo)) {
 				cerrarSubmenu()
 			}
