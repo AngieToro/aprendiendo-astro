@@ -1,0 +1,30 @@
+---
+// Tarjeta de servicio que se queda pegada arriba al hacer scroll (position: sticky).
+// Todas se pegan a la misma altura (top-24): cada fila nueva sube y tapa a la anterior. Solo CSS, sin JavaScript.
+import type { Service } from '../data/services.ts'
+
+interface Props extends Service {
+	index: number
+	total: number
+}
+
+const { icon, title, description, index, total } = Astro.props
+
+// 0 → "01", 4 → "05"
+const number = String(index + 1).padStart(2, '0')
+const totalNumber = String(total).padStart(2, '0')
+---
+
+<article class="sticky top-24 flex flex-col h-48 p-5 bg-white border border-secundario/30 rounded-lg shadow-md transition hover:-translate-y-1 hover:border-acento">
+	<div class="flex items-center gap-4 text-sm text-slate-600">
+		<span class="flex-1 h-px bg-secundario/30"></span>
+		<span>
+			{number} / {totalNumber}
+		</span>
+	</div>
+	<span class="mt-4 text-4xl" aria-hidden="true">
+		{icon}
+	</span>
+	<h3 class="mt-2 text-xl font-semibold text-primario font-titulos">{title}</h3>
+	<p class="mt-auto text-slate-600">{description}</p>
+</article>

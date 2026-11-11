@@ -5,6 +5,7 @@ import TeamCard from '../components/TeamCard.astro'
 import SectionTitle from '../components/SectionTitle.astro'
 import Button from '../components/Button.astro'
 import FaqItem from '../components/FaqItem.astro'
+import StackCard from '../components/StackCard.astro'
 import { services } from '../data/services.ts'
 import { members } from '../data/teams.ts'
 import { mailtoUrl, whatsappUrl } from '../data/contact.ts'
@@ -56,8 +57,8 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 	<section id="servicios" class="py-8 px-4 bg-fondo scroll-mt-20">
 		<SectionTitle title="Nuestros servicios" />
 		<div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto *:w-full sm:*:w-72">
-			{services.map((service) => (
-				<InfoCard {...service} />
+			{services.map((service, index) => (
+				<StackCard {...service} index={index} total={services.length} />
 			))}
 		</div>
 	</section>

@@ -586,6 +586,9 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 - **Preguntas frecuentes sin JS** (`FaqItem.astro`): `<details>` + `<summary>` abren y cierran solos, con teclado y
   lector de pantalla. Con el **mismo `name`** en todos, al abrir uno se cierra el anterior (acordeón).
   `list-none [&::-webkit-details-marker]:hidden` quita el triángulo del navegador.
+- **Tarjetas apiladas al hacer scroll** (`StackCard.astro`): todas con `sticky top-24` (bajo el header) y fondo
+  opaco (`bg-white`). Cada fila nueva sube y tapa a la anterior; se sueltan al terminar su contenedor. Luce más
+  en celular (una columna, muchas tarjetas) que en escritorio. No funciona si un padre tiene `overflow: hidden`.
 - Antes de escribir JavaScript, preguntar si HTML ya lo resuelve.
 
 ### Prettier
@@ -610,6 +613,10 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 - `group` en el **padre** + `group-hover:` / `group-open:` / `group-aria-expanded:` en el **hijo**: el hijo cambia
   según el estado del padre. Sin `group`, la variante no hace nada (y no da error).
 - Las clases van **dentro** de `class="..."`. Escritas sueltas en la etiqueta son atributos y no hacen nada.
+- Tailwind no arma clases con variables: ``class={`top-${n}`}`` no funciona porque busca nombres **completos** en el
+  código. Para valores que dependen de datos, usar `style={`top: ${n}rem`}`.
+- Elementos con posición (`sticky`, `relative`...) que se superponen: el que viene después en el HTML queda encima,
+  salvo que otro tenga `z-index` (por eso el header lleva `z-10`).
 - El padding de algo clicable va en el elemento mismo (ej. `<summary>`), para que toda la franja se pueda clicar. El
   borde y el `rounded` van en la caja completa.
 - `padding` (`p-`) = espacio **dentro** de la caja; `margin` (`m-`) = espacio **fuera**, con las vecinas.
