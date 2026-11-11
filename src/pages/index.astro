@@ -4,10 +4,12 @@ import InfoCard from '../components/InfoCard.astro'
 import TeamCard from '../components/TeamCard.astro'
 import SectionTitle from '../components/SectionTitle.astro'
 import Button from '../components/Button.astro'
+import FaqItem from '../components/FaqItem.astro'
 import { services } from '../data/services.ts'
 import { members } from '../data/teams.ts'
 import { mailtoUrl, whatsappUrl } from '../data/contact.ts'
 import { purpose, values } from '../data/values.ts'
+import { questions } from '../data/faq.ts'
 
 const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
@@ -60,7 +62,16 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 		</div>
 	</section>
 
-	<section id="contacto" class="py-8 px-4 scroll-mt-20">
+	<section id="preguntas" class="py-8 px-4 scroll-mt-20">
+		<SectionTitle title="Preguntas y respuestas" />
+		<div class="max-w-2xl mx-auto space-y-3">
+			{questions.map((item) => (
+				<FaqItem {...item} />
+			))}
+		</div>
+	</section>
+
+	<section id="contacto" class="py-8 px-4 bg-fondo scroll-mt-20">
 		<SectionTitle title="Contáctanos" />
 		<p class="max-w-2xl mx-auto text-center text-slate-600">Escríbenos</p>
 		<div class="flex flex-wrap justify-center gap-4 mt-6">

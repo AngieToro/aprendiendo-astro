@@ -573,6 +573,21 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 - Renombrar con `git mv archivo-viejo archivo-nuevo`, para que Git lo registre como el mismo archivo.
 - Los datos guardan solo el contenido. Los espacios y el formato los decide el componente.
 
+### Piezas inspiradas en templates
+
+- Antes de copiar un template, revisar la licencia (MIT permite reutilizar) y **traducir** su CSS a Tailwind y a los
+  tokens propios; no copiar fotos ni librerías extra (scroll suave, analytics) si no hacen falta.
+- **Botón con variantes** (`Button.astro`): un objeto `colores = { primario: '...', acento: '...' }` con **strings** de
+  clases y `class:list={[base, colores[variant]]}`. Si los valores son objetos, `class:list` imprime los nombres de las
+  claves, no las clases.
+- **Aparición al hacer scroll**: `IntersectionObserver` agrega la clase `visible` a cada elemento con `data-aparecer` y
+  luego deja de observarlo (`unobserve`). Mejora progresiva: el contenido solo se oculta si hay JS (clase `.js` en
+  `<html>`) y si la persona no pidió menos movimiento (`prefers-reduced-motion`).
+- **Preguntas frecuentes sin JS** (`FaqItem.astro`): `<details>` + `<summary>` abren y cierran solos, con teclado y
+  lector de pantalla. Con el **mismo `name`** en todos, al abrir uno se cierra el anterior (acordeón).
+  `list-none [&::-webkit-details-marker]:hidden` quita el triángulo del navegador.
+- Antes de escribir JavaScript, preguntar si HTML ya lo resuelve.
+
 ### Prettier
 
 - Formatear al guardar solo afecta al archivo guardado: correr `npm run format:check` antes del commit.
@@ -592,6 +607,11 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 - `flex` y `grid` se ponen en el **padre** y ordenan a sus **hijos directos**. Si quieres ordenar solo
   algunos elementos, agrúpalos en un `<div>` y pon ahí el `flex` / `grid`.
 - Algunas clases van en pareja: `grid` (activa) + `grid-cols-N` (configura); `border` + `border-{color}`.
+- `group` en el **padre** + `group-hover:` / `group-open:` / `group-aria-expanded:` en el **hijo**: el hijo cambia
+  según el estado del padre. Sin `group`, la variante no hace nada (y no da error).
+- Las clases van **dentro** de `class="..."`. Escritas sueltas en la etiqueta son atributos y no hacen nada.
+- El padding de algo clicable va en el elemento mismo (ej. `<summary>`), para que toda la franja se pueda clicar. El
+  borde y el `rounded` van en la caja completa.
 - `padding` (`p-`) = espacio **dentro** de la caja; `margin` (`m-`) = espacio **fuera**, con las vecinas.
 - Método para estilar sin prueba y error, de afuera hacia adentro: 1) la caja (fondo, borde, padding), 2) espacios entre elementos, 3) texto (tamaño, grosor, color), 4) interacción (`hover:`). Probar
   clases en vivo con el inspector del navegador (clic derecho → Inspeccionar → editar `class`).
