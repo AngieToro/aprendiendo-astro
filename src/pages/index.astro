@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import InfoCard from '../components/InfoCard.astro'
 import TeamCard from '../components/TeamCard.astro'
 import SectionTitle from '../components/SectionTitle.astro'
+import Button from '../components/Button.astro'
 import { services } from '../data/services.ts'
 import { members } from '../data/teams.ts'
 import { mailtoUrl, whatsappUrl } from '../data/contact.ts'
@@ -63,20 +64,14 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 		<SectionTitle title="Contáctanos" />
 		<p class="max-w-2xl mx-auto text-center text-slate-600">Escríbenos</p>
 		<div class="flex flex-wrap justify-center gap-4 mt-6">
-			<a
-				href={mailtoUrl}
-				class="px-6 py-3 rounded-md font-bold bg-primario text-white shadow-sm hover:bg-primario-hover transition"
-			>
-				Enviar correo
-			</a>
-			<a
+			<Button label="Enviar correo" href={mailtoUrl} />
+			<Button
+				label="Escribir por WhatsApp"
 				href={whatsappUrl}
+				variant="acento"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="px-6 py-3 rounded-md font-bold bg-acento text-primario shadow-sm hover:opacity-90 transition"
-			>
-				Escribir por WhatsApp
-			</a>
+			/>
 		</div>
 	</section>
 </BaseLayout>

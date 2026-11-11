@@ -1,0 +1,42 @@
+---
+// Botón con flecha que gira al pasar el mouse.
+// Un solo componente para todos los botones del sitio: cambia solo el color (variant).
+interface Props {
+	label: string
+	href: string
+	variant?: 'primario' | 'acento'
+	target?: string
+	rel?: string
+}
+
+const { label, href, variant = 'primario', target, rel } = Astro.props
+
+const colores = {
+	primario: 'bg-primario text-white hover:bg-primario-hover',
+	acento: 'bg-acento text-primario hover:opacity-90',
+}
+---
+
+<a
+	href={href}
+	target={target}
+	rel={rel}
+	class:list={[
+		'group inline-flex items-center gap-3 px-6 py-3 rounded-md font-bold shadow-sm transition',
+		colores[variant],
+	]}
+>
+	{label}
+	<svg
+		class="size-4 transition-transform duration-300 group-hover:rotate-45 motion-reduce:transition-none"
+		viewBox="0 0 16 16"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+		aria-hidden="true"
+	>
+		<path d="M4 12 12 4M6 4h6v6"></path>
+	</svg>
+</a>
