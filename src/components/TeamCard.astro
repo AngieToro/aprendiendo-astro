@@ -12,7 +12,10 @@ interface Props {
 const { photo, name, title, description } = Astro.props
 ---
 
-<article class="p-4 text-center bg-white border border-secundario/30 shadow-sm transition hover:-translate-y-1 rounded-lg hover:border-acento">
+<article
+	data-aparecer
+	class="p-4 text-center bg-white border border-secundario/30 shadow-sm transition hover:-translate-y-1 rounded-lg hover:border-acento"
+>
 	<Image
 		src={photo}
 		alt={`Foto de ${name}`}

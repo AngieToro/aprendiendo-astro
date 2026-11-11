@@ -33,3 +33,23 @@
 	/* Clase font-titulos para h1, h2, h3 */
 	--font-titulos: var(--font-poppins);
 }
+
+/*
+ * Aparición suave al bajar (ver el <script> al final de BaseLayout).
+ * Solo se ocultan si hay JavaScript (.js) y si la persona no pidió menos movimiento:
+ * sin JavaScript, o con movimiento reducido, todo se ve normal desde el inicio.
+ */
+@media (prefers-reduced-motion: no-preference) {
+	.js [data-aparecer] {
+		opacity: 0;
+		transform: translateY(24px);
+		transition:
+			opacity 0.6s ease-out,
+			transform 0.6s ease-out;
+	}
+
+	.js [data-aparecer].visible {
+		opacity: 1;
+		transform: none;
+	}
+}

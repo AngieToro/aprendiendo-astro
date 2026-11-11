@@ -10,7 +10,9 @@ interface Props {
 
 const { description, title } = Astro.props
 
-// URL completa de esta página: dominio (site en astro.config.mjs) + ruta actual
+{
+	/* URL completa de esta página: dominio (site en astro.config.mjs) + ruta actual */
+}
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
 const ogImageUrl = new URL('/og-image.png', Astro.site)
 ---
@@ -41,6 +43,10 @@ const ogImageUrl = new URL('/og-image.png', Astro.site)
 		<meta name="twitter:card" content="summary_large_image" />
 		<Font cssVariable="--font-poppins" preload />
 		<Font cssVariable="--font-open-sans" />
+		{/* Marca que hay JavaScript: solo entonces se ocultan los elementos que aparecen al bajar */}
+		<script is:inline>
+			document.documentElement.classList.add('js')
+		</script>
 	</head>
 	<body class="bg-white text-slate-900">
 		<Header />
@@ -50,5 +56,22 @@ const ogImageUrl = new URL('/og-image.png', Astro.site)
 		<footer class="mt-8 px-4 py-6 text-sm border-t border-slate-200 text-right text-slate-600">
 			<p>2026 TestCorp</p>
 		</footer>
+		<script>
+			// Aparición suave al bajar: cada elemento con data-aparecer recibe la clase "visible"
+			// cuando entra en la pantalla
+			const elementos = document.querySelectorAll('[data-aparecer]')
+
+			const vigilante = new IntersectionObserver((entradas) => {
+				entradas.forEach((entrada) => {
+					if (entrada.isIntersecting) {
+						// Mostrar el elemento y dejar de observarlo: aparece una sola vez
+						entrada.target.classList.add('visible')
+						vigilante.unobserve(entrada.target)
+					}
+				})
+			})
+
+			elementos.forEach((elemento) => vigilante.observe(elemento))
+		</script>
 	</body>
 </html>
