@@ -11,6 +11,8 @@ import { members } from '../data/teams.ts'
 import { mailtoUrl, whatsappUrl } from '../data/contact.ts'
 import { purpose, values } from '../data/values.ts'
 import { questions } from '../data/faq.ts'
+import { Image } from 'astro:assets'
+import misionImg from '../assets/mision.jpg'
 
 const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
@@ -30,18 +32,28 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 		</p>
 	</section>
 
-	<section id="mision" class="py-8 px-4 bg-fondo scroll-mt-20">
-		<SectionTitle title="Misión, visión y valores" />
-		<div class="grid gap-4 md:grid-cols-2 max-w-4xl mx-auto mb-4">
-			{purpose.map((item) => (
-				<InfoCard {...item} />
-			))}
-		</div>
-		<h3 class="text-center font-semibold text-primario font-titulos mt-8 mb-4">Valores</h3>
-		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto">
-			{values.map((value) => (
-				<InfoCard {...value} />
-			))}
+	<section id="mision" class="py-8 px-4 relative overflow-hidden scroll-mt-20">
+		<Image
+			src={misionImg}
+			alt=""
+			widths={[640, 1280, 1920]}
+			sizes="100vw"
+			class="absolute inset-0 w-full h-full object-cover"
+		/>
+		<div class="absolute inset-0 bg-primario/80" aria-hidden="true"></div>
+		<div class="relative">
+			<SectionTitle title="Misión y visión" light />
+			<div class="grid gap-4 md:grid-cols-2 max-w-4xl mx-auto mb-12">
+				{purpose.map((item) => (
+					<InfoCard {...item} variant="vidrio" />
+				))}
+			</div>
+			<SectionTitle title="Valores" light />
+			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto">
+				{values.map((value) => (
+					<InfoCard {...value} variant="vidrio" />
+				))}
+			</div>
 		</div>
 	</section>
 

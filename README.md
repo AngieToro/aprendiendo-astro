@@ -608,6 +608,13 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 - **Tarjetas apiladas al hacer scroll** (`StackCard.astro`): todas con `sticky top-24` (bajo el header) y fondo
   opaco (`bg-white`). Cada fila nueva sube y tapa a la anterior; se sueltan al terminar su contenedor. Luce más
   en celular (una columna, muchas tarjetas) que en escritorio. No funciona si un padre tiene `overflow: hidden`.
+- **Sección oscura con tarjetas de vidrio** (misión): `bg-primario` en la sección, `<SectionTitle light />` y
+  `<InfoCard variant="vidrio" />` (`bg-white/10 border-white/20 backdrop-blur-md`, texto blanco). El desenfoque solo
+  se nota si detrás hay una imagen.
+- **Imagen de fondo con capa oscura** (pendiente, para cuando haya foto): la sección con `relative overflow-hidden`;
+  capa 1 `<Image alt="" class="absolute inset-0 w-full h-full object-cover" />`; capa 2
+  `<div class="absolute inset-0 bg-primario/80" aria-hidden="true">`; capa 3, el contenido en un `<div class="relative">`.
+  La capa oscura asegura el contraste del texto blanco sobre cualquier foto.
 - Antes de escribir JavaScript, preguntar si HTML ya lo resuelve.
 
 ### Prettier
