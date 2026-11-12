@@ -1,11 +1,11 @@
 # Aprendiendo Astro + Tailwind
 
 Mini proyecto de aprendizaje: una landing one-page de una consultora TI ficticia (TestCorp), construida
-con **Astro** y **Tailwind CSS**. Reproduce la estructura del sitio real de un proyecto clasico, para que
+con **Astro** y **Tailwind CSS**. Reproduce la estructura del sitio real de un proyecto clásico, para que
 todo lo aprendido se pueda reutilizar.
 
 Este README es el **manual del proyecto**: cómo levantarlo, cómo se armó paso a paso y los tips
-importantes aprendidos en cada lección.
+importantes aprendidos.
 
 ---
 
@@ -54,22 +54,28 @@ aprendiendo-astro/
 │   ├── layouts/
 │   │   └── BaseLayout.astro     ← <html>, <head> y <body> comunes (props: title, description)
 │   ├── components/
-│   │   ├── InfoCard.astro       ← tarjeta con ícono, título y texto (servicios, valores)
+│   │   ├── Header.astro         ← logo + menú de anclas + hamburguesa + desplegable (con <script>)
+│   │   ├── Logo.astro           ← ícono SVG + nombre (usa tokens de color)
 │   │   ├── SectionTitle.astro   ← título de sección: h2 + línea de acento (prop: title)
-│   │   ├── Header.astro         ← logo + menú de anclas + hamburguesa (con <script>)
+│   │   ├── Button.astro         ← botón con flecha que gira (props: label, href, variant, target, rel)
+│   │   ├── InfoCard.astro       ← tarjeta con ícono, título y texto (misión, visión y valores)
+│   │   ├── StackCard.astro      ← tarjeta de servicio que se apila al hacer scroll (sticky)
 │   │   ├── TeamCard.astro       ← tarjeta de persona con foto optimizada
-│   │   └── Logo.astro           ← ícono SVG + nombre (usa tokens de color)
-│   ├── data/
+│   │   └── FaqItem.astro        ← pregunta que se abre y cierra (<details>, sin JS)
+│   ├── data/                    ← solo contenido: para editar textos se cambia aquí
 │   │   ├── services.ts          ← lista de servicios
-│   │   ├── teams.ts             ← lista del equipo
+│   │   ├── teams.ts             ← lista del equipo (con fotos importadas)
+│   │   ├── values.ts            ← misión, visión (purpose) y valores
+│   │   ├── faq.ts               ← preguntas frecuentes
 │   │   └── contact.ts           ← correo, WhatsApp y sus URL (mailtoUrl, whatsappUrl)
 │   ├── assets/team/             ← fotos que Astro optimiza
 │   └── styles/
-│       └── global.css           ← carga Tailwind + tokens de marca (@theme)
+│       └── global.css           ← carga Tailwind + tokens de marca (@theme) + animación de aparición
 ├── public/                      ← se copia tal cual al sitio (favicon.svg, og-image.png, robots.txt)
 ├── docs/
 │   └── tailwind-referencia.xlsx ← referencia de clases Tailwind (solo local, no se versiona)
-├── astro.config.mjs             ← configuración de Astro (plugin de Tailwind y fuentes)
+├── astro.config.mjs             ← configuración de Astro (site, Tailwind, fuentes y sitemap)
+├── wrangler.jsonc               ← configuración del deploy en Cloudflare Workers
 ├── prettier.config.mjs          ← reglas de formato del proyecto
 ├── .prettierignore              ← archivos que Prettier no toca
 ├── .gitignore                   ← archivos que Git no versiona
@@ -82,7 +88,7 @@ aprendiendo-astro/
 
 ## Cómo se armó, paso a paso
 
-### 1. Node.js con nvm (lección 1)
+### 1. Node.js con nvm
 
 Astro 7 exige Node `>= 22.22.0`. Se instaló con **nvm** (no pide `sudo` y permite varias versiones):
 
@@ -91,7 +97,7 @@ nvm install 22              # instala la última v22 y la deja como predetermina
 echo "v22.23.3" > .nvmrc    # fija la versión del proyecto
 ```
 
-### 2. Crear el proyecto Astro (lección 1)
+### 2. Crear el proyecto Astro
 
 ```bash
 npm create astro@latest -- --template minimal
@@ -99,7 +105,7 @@ npm create astro@latest -- --template minimal
 
 Respuestas: carpeta `.`, instalar dependencias **sí**, inicializar git **no** (se hizo a mano).
 
-### 3. Git y GitHub (lección 1)
+### 3. Git y GitHub
 
 1. Crear `.gitignore` **antes** del primer commit (ver tips).
 2. Inicializar y subir:
@@ -117,7 +123,7 @@ git push -u origin main
    _Contents: Read and write_, 90 días. Se pega como contraseña en el primer `push` y queda guardado en
    el llavero de macOS.
 
-### 4. Prettier (extra, después de la lección 2)
+### 4. Prettier
 
 ```bash
 npm install --save-dev prettier prettier-plugin-astro
@@ -136,7 +142,7 @@ npm install --save-dev prettier prettier-plugin-astro
 "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }
 ```
 
-### 5. Tailwind CSS 4 (lección 4)
+### 5. Tailwind CSS 4
 
 ```bash
 npx astro add tailwind
@@ -156,7 +162,7 @@ Extensión de VS Code **Tailwind CSS IntelliSense** (`bradlc.vscode-tailwindcss`
 autocompleta las clases mientras escribes `class="..."` y, al pasar el mouse, muestra el CSS que aplica.
 Quedó agregada a `.vscode/extensions.json`.
 
-### 6. Sistema de diseño: colores y fuentes de marca (lección 5)
+### 6. Sistema de diseño: colores y fuentes de marca
 
 **Colores** como tokens en `src/styles/global.css` (Tailwind 4 no usa `tailwind.config.js`):
 
@@ -169,6 +175,17 @@ Quedó agregada a `.vscode/extensions.json`.
 	--color-fondo: #eef6fc;
 }
 ```
+
+| Muestra                                                      | Token            | Hex       | Uso                         | Contraste                                                |
+| ------------------------------------------------------------ | ---------------- | --------- | --------------------------- | -------------------------------------------------------- |
+| ![primario](.github/readme/colores/primario.svg)             | `primario`       | `#001a3f` | Botones, títulos, header    | Con texto blanco: 17.2                                   |
+| ![primario-hover](.github/readme/colores/primario-hover.svg) | `primario-hover` | `#0a2f66` | Hover del primario          | Con texto blanco: 13.0                                   |
+| ![secundario](.github/readme/colores/secundario.svg)         | `secundario`     | `#5ca7e0` | Fondos, bordes, íconos      | Con navy: 6.6. **Nunca** con blanco (2.6)                |
+| ![acento](.github/readme/colores/acento.svg)                 | `acento`         | `#f55a1e` | Detalles que deben destacar | Con navy: 5.2. Con blanco (3.3) solo grande y en negrita |
+| ![fondo](.github/readme/colores/fondo.svg)                   | `fondo`          | `#eef6fc` | Fondo de secciones          | Con navy: 15.8                                           |
+
+Las muestras son SVG pequeños en `.github/readme/colores/` (versionados; no se publican en el sitio porque no están
+en `public/`). Si cambias un color de marca, actualiza `global.css`, el SVG y esta tabla.
 
 **Fuentes** con el sistema oficial de Astro (descarga las fuentes en el build y las sirve desde el sitio):
 
@@ -185,9 +202,10 @@ name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
 }
 ```
 
-### 7. One-page: header fijo, anclas y menú hamburguesa (lección 6)
+### 7. One-page: header fijo, anclas y menú hamburguesa
 
-- Cada sección de `index.astro` tiene un `id` (`inicio`, `nosotros`, `servicios`, `contacto`).
+- Cada sección de `index.astro` tiene un `id` (`inicio`, `nosotros`, `mision`, `equipo`, `servicios`, `preguntas`,
+  `contacto`). Cada `id` nuevo se agrega también al menú de `Header.astro`.
 - `src/components/Header.astro` (incluido en `BaseLayout`): logo (`Logo.astro`, SVG inline con
   `fill-primario`…) + `<nav>` con enlaces `href="/#id"`.
 - Header pegado arriba: `sticky top-0 z-10`. Scroll suave: `scroll-smooth` en `<html>`. Para que el
@@ -197,14 +215,14 @@ name: 'Poppins', cssVariable: '--font-poppins', weights: [600, 700] }, ...]`.
 - Favicon: `public/favicon.svg` con el ícono del logo (colores en hex, no ve las clases de Tailwind).
   Se eliminó `favicon.ico` de la plantilla.
 
-### 8. Datos, equipo, fotos y desplegable (lecciones 7 y 8)
+### 8. Datos, equipo, fotos y desplegable
 
 - `src/data/services.ts` y `src/data/teams.ts`: interfaz + lista exportada. `index.astro` las recorre con `.map()`.
 - `src/components/TeamCard.astro` con `<Image />` de `astro:assets`; fotos en `src/assets/team/` importadas en
   `teams.ts`.
 - En `Header.astro`, "Nosotros" es un desplegable (Quiénes somos + Equipo) con su `<script>`.
 
-### 9. Contacto: correo y WhatsApp (lección 9)
+### 9. Contacto: correo y WhatsApp
 
 No se instala nada: son enlaces normales.
 
@@ -212,7 +230,7 @@ No se instala nada: son enlaces normales.
 - `index.astro` importa las dos URL y las usa en dos `<a>` dentro de un padre `flex flex-wrap justify-center gap-4`.
 - Para el proyecto del cliente: cambiar solo los datos del objeto `contact` y probar los dos botones.
 
-### 10. SEO (lección 10)
+### 10. SEO
 
 1. `site` en `astro.config.mjs`: URL pública del sitio. Es necesaria para las URL completas y el sitemap.
 2. En `BaseLayout.astro`: URL canónica, etiquetas Open Graph, imagen para compartir y `twitter:card`.
@@ -273,7 +291,7 @@ Qué tener en cuenta:
 
 Resultado de este proyecto: 100 en las cuatro categorías, en Mobile y Desktop.
 
-### 11. Deploy en Cloudflare Workers (lección 11)
+### 11. Deploy en Cloudflare Workers
 
 Cloudflare se conecta al repo de GitHub y, desde entonces, cada `git push` a `main` publica el sitio solo:
 
@@ -566,8 +584,9 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 
 ### Componentes reutilizables
 
-- Unir componentes solo si tienen la misma forma y cambian por las mismas razones: `InfoCard` sirve para servicios y
-  valores; `TeamCard` queda aparte porque tiene foto y otros campos.
+- Unir componentes solo si tienen la misma forma y cambian por las mismas razones: `InfoCard` sirve para misión,
+  visión y valores; `TeamCard` queda aparte porque tiene foto y otros campos; `StackCard` también, porque se
+  comporta distinto (sticky y numeración).
 - Nombrar un componente por lo que es (`InfoCard`), no por dónde se usa (`ServiceCard`).
 - Si un bloque se repite, sacarlo a un componente (`SectionTitle`): el cambio se hace en un solo lugar.
 - Renombrar con `git mv archivo-viejo archivo-nuevo`, para que Git lo registre como el mismo archivo.
@@ -653,6 +672,7 @@ o su prefijo (`hover:`, `md:`)? → ¿el valor es suficientemente grande?
 ### Sección con título y línea de acento
 
 ```astro
+<!-- Hoy se usa <SectionTitle title="..." />, que contiene este h2 y la línea -->
 <section id="servicios" class="py-8 px-4 bg-fondo scroll-mt-20">
 	<h2 class="font-semibold text-center text-2xl md:text-3xl mb-4 text-primario font-titulos">
 		Título
@@ -678,8 +698,8 @@ Elegir columnas según la cantidad: con 6 elementos, 2, 3 y 6 columnas dan filas
 
 ```astro
 <div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto *:w-full sm:*:w-72">
-	{services.map((service) => (
-		<InfoCard {...service} />
+	{services.map((service, index) => (
+		<StackCard {...service} index={index} total={services.length} />
 	))}
 </div>
 ```
@@ -740,17 +760,19 @@ de una fila quedan iguales aunque el texto tenga largos distintos.
 
 ### 2. Qué se reutiliza
 
-| Pieza                                                    | Qué hacer                                            |
-| -------------------------------------------------------- | ---------------------------------------------------- |
-| `BaseLayout.astro`                                       | Copiar. Cambiar `og:site_name` y el texto del footer |
-| `Header.astro`                                           | Copiar. Cambiar los enlaces según las secciones      |
-| `InfoCard.astro`, `SectionTitle.astro`, `TeamCard.astro` | Copiar. Ajustar los campos si el cliente pide otros  |
-| `src/data/*.ts`                                          | Copiar la estructura. Reemplazar los datos           |
-| `src/styles/global.css`                                  | Copiar. Cambiar colores y revisar su contraste       |
-| Fuentes en `astro.config.mjs`                            | Copiar. Cambiar por las fuentes de la marca          |
-| `Logo.astro`, `favicon.svg`, `og-image.png`              | Reemplazar por los del cliente                       |
-| `wrangler.jsonc`                                         | Copiar. Cambiar `name` y `compatibility_date`        |
-| `public/robots.txt`                                      | Copiar. Cambiar el dominio                           |
+| Pieza                                                    | Qué hacer                                                             |
+| -------------------------------------------------------- | --------------------------------------------------------------------- |
+| `BaseLayout.astro`                                       | Copiar. Cambiar `og:site_name` y el texto del footer                  |
+| `Header.astro`                                           | Copiar. Cambiar los enlaces según las secciones                       |
+| `InfoCard.astro`, `SectionTitle.astro`, `TeamCard.astro` | Copiar. Ajustar los campos si el cliente pide otros                   |
+| `Button.astro`, `StackCard.astro`, `FaqItem.astro`       | Copiar. Revisar colores y textos                                      |
+| Aparición al hacer scroll                                | Copiar el bloque de `global.css` y los dos `<script>` de `BaseLayout` |
+| `src/data/*.ts`                                          | Copiar la estructura. Reemplazar los datos                            |
+| `src/styles/global.css`                                  | Copiar. Cambiar colores y revisar su contraste                        |
+| Fuentes en `astro.config.mjs`                            | Copiar. Cambiar por las fuentes de la marca                           |
+| `Logo.astro`, `favicon.svg`, `og-image.png`              | Reemplazar por los del cliente                                        |
+| `wrangler.jsonc`                                         | Copiar. Cambiar `name` y `compatibility_date`                         |
+| `public/robots.txt`                                      | Copiar. Cambiar el dominio                                            |
 
 ### 3. Secciones nuevas del proyecto del cliente
 
