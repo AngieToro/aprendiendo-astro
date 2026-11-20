@@ -638,11 +638,17 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
   se desvanecen (`@keyframes portada-salir` con `translate: var(--x) var(--y)`). La entrada va en el `<div>` y la
   salida en la `<Image>`, para que las dos animaciones no se pisen. Fotos decorativas: `alt=""` y
   `loading="eager"` (se ven al cargar).
-- **Animación ligada al scroll** (CSS, sin JS): `animation: nombre linear both;` y **después**
-  `animation-timeline: scroll(root); animation-range: 0 70vh;`. Con `scroll()` solo, usa el contenedor de scroll
+- **Animación ligada al scroll** (CSS, sin JS): `animation-name: nombre; animation-timing-function: linear;
+animation-fill-mode: both; animation-timeline: scroll(root); animation-range: 0 70vh;` (ver el aviso de abajo). Si
+  se usa el atajo `animation`, `animation-timeline` va **después**, porque el atajo la reinicia. Con `scroll()` solo, usa el contenedor de scroll
   más cercano, y `overflow-hidden` convierte a la sección en uno (que nunca se mueve): por eso `scroll(root)`.
   Envolver en `@supports (animation-timeline: scroll())` y `prefers-reduced-motion: no-preference`; sin soporte, el
   collage queda quieto. Diagnóstico: `elemento.getAnimations()[0].timeline.source` dice qué está mirando.
+- ⚠️ **Escribir la animación con scroll en longhands** (`animation-name`, `animation-timing-function`,
+  `animation-fill-mode`, `animation-timeline`), no con el atajo `animation`. Al hacer el build, el minificador junta
+  `animation` + `animation-timeline` en un solo atajo inválido y el navegador descarta la regla: **en dev funciona y en
+  producción no**. Probar estos efectos en `npm run preview`, y revisar la regla compilada con
+  `grep -o '.portada-foto{[^}]*}' dist/_astro/*.css`.
 - **Carrusel del equipo** (`TeamTicker.astro`): la lista va **dos veces** en una fila (`flex w-max`), la segunda con
   `aria-hidden="true"`. La animación mueve la fila `-50%` (una copia) y se repite sin que se note el salto; el `pr-4`
   de cada copia iguala el espacio entre copias. Se pausa con hover (`hover:[animation-play-state:paused]`) y con un
