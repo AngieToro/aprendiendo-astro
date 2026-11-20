@@ -86,6 +86,9 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       `robots.txt`. Lighthouse en el sitio publicado: 100 en Mobile y Desktop. Tarjeta al compartir comprobada.
 - [x] Piezas de templates (2026-11-11), una rama por pieza: 1) `Button.astro` con variantes y flecha, 2) aparición al
       hacer scroll (`IntersectionObserver` + `data-aparecer`), 3) preguntas frecuentes con `<details name="faq">`
-      (`FaqItem.astro`, `src/data/faq.ts`), 4) servicios apilados (`StackCard.astro`, `sticky top-24`).
-      Pendientes: 5) misión/visión con imagen de fondo y capa oscura, 6) menú a pantalla completa, 7) carrusel del
-      equipo, 8) galería de Elias Vent.
+      (`FaqItem.astro`, `src/data/faq.ts`), 4) servicios apilados (`StackCard.astro`, `sticky top-24`), y
+      pieza 5) misión con imagen de fondo (`src/assets/mision.jpg`, `widths` + `sizes`), capa `bg-primario/80`,
+      `SectionTitle light` e `InfoCard variant="vidrio"`.
+      Pieza 6 (menú a pantalla completa) descartada: el menú actual basta para un one-page.
+      Pieza 7: carrusel del equipo (`TeamTicker.astro`, `animate-carrusel` en `@theme`, dos copias + `-50%`, pausa con
+      hover y botón ícono con `aria-pressed`, `motion-reduce`). Pendiente: 8) galería de Elias Vent.

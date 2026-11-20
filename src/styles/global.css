@@ -20,6 +20,16 @@
 
 	/* Fondo suave (celeste muy claro): fondo de secciones. Con texto navy: 15.8 */
 	--color-fondo: #eef6fc;
+
+	/* Carrusel del equipo: genera la clase animate-carrusel (ver TeamTicker.astro).
+	   Mueve la fila la mitad de su ancho = una copia completa de la lista; luego vuelve al inicio sin que se note */
+	--animate-carrusel: carrusel 45s linear infinite;
+
+	@keyframes carrusel {
+		to {
+			transform: translateX(-50%);
+		}
+	}
 }
 
 /*

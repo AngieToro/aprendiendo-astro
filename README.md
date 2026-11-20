@@ -61,6 +61,7 @@ aprendiendo-astro/
 │   │   ├── InfoCard.astro       ← tarjeta con ícono, título y texto (misión, visión y valores)
 │   │   ├── StackCard.astro      ← tarjeta de servicio que se apila al hacer scroll (sticky)
 │   │   ├── TeamCard.astro       ← tarjeta de persona con foto optimizada
+│   │   ├── TeamTicker.astro     ← carrusel del equipo: TeamCard en fila que se mueve, con pausa
 │   │   └── FaqItem.astro        ← pregunta que se abre y cierra (<details>, sin JS)
 │   ├── data/                    ← solo contenido: para editar textos se cambia aquí
 │   │   ├── services.ts          ← lista de servicios
@@ -475,6 +476,14 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 - La etiqueta se elige por lo que **significa**, no por cómo se ve (el tamaño lo dan los estilos).
 - `<section>` = capítulo de la página con su `h2`. `<article>` = bloque que se entiende solo (tarjeta).
 - `lang="es"` en `<html>`. Íconos decorativos con `aria-hidden="true"`.
+- Botones que cambian de estado, ¿qué atributo usar?
+  - Si **muestra u oculta** otra cosa (un menú, un desplegable), usa `aria-expanded`.
+  - Si **activa o desactiva** un modo (pausa, negrita, favorito), usa `aria-pressed`.
+  - Con `aria-pressed` el nombre del botón **no cambia** ("Pausar carrusel"): el lector agrega "presionado".
+- Botón solo con ícono: `aria-label` con su nombre y el SVG con `aria-hidden="true"`. Área mínima para tocar:
+  24 × 24 px (el botón, no el ícono).
+- Lo que se mueve solo por más de 5 segundos debe poder pausarse (WCAG 2.2.2), sin importar la velocidad. La pausa
+  con hover no basta: no existe en celular ni con teclado.
 
 ### Sistema de diseño (colores y fuentes)
 
@@ -611,10 +620,19 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 - **Sección oscura con tarjetas de vidrio** (misión): `bg-primario` en la sección, `<SectionTitle light />` y
   `<InfoCard variant="vidrio" />` (`bg-white/10 border-white/20 backdrop-blur-md`, texto blanco). El desenfoque solo
   se nota si detrás hay una imagen.
-- **Imagen de fondo con capa oscura** (pendiente, para cuando haya foto): la sección con `relative overflow-hidden`;
-  capa 1 `<Image alt="" class="absolute inset-0 w-full h-full object-cover" />`; capa 2
-  `<div class="absolute inset-0 bg-primario/80" aria-hidden="true">`; capa 3, el contenido en un `<div class="relative">`.
-  La capa oscura asegura el contraste del texto blanco sobre cualquier foto.
+- **Imagen de fondo con capa oscura** (sección misión): la sección con `relative overflow-hidden`; capa 1
+  `<Image alt="" widths={[640, 1280, 1920]} sizes="100vw" class="absolute inset-0 w-full h-full object-cover" />`;
+  capa 2 `<div class="absolute inset-0 bg-primario/80" aria-hidden="true">`; capa 3, el contenido en un
+  `<div class="relative">`. La capa oscura asegura el contraste del texto blanco sobre cualquier foto.
+- Fotos de fondo: abstractas, sin texto ni gente, en tonos de la marca. Achicar la original **antes del primer commit**
+  (`sips --resampleWidth 1920 archivo.jpg` en macOS), porque Git guarda todas las versiones. Con `widths` + `sizes`,
+  Astro genera varios tamaños y el celular descarga el chico (aquí: 26 KB en vez de 120 KB). Revisar el
+  `before / after` del build: más de ~300 KB es señal de alerta.
+- **Carrusel del equipo** (`TeamTicker.astro`): la lista va **dos veces** en una fila (`flex w-max`), la segunda con
+  `aria-hidden="true"`. La animación mueve la fila `-50%` (una copia) y se repite sin que se note el salto; el `pr-4`
+  de cada copia iguala el espacio entre copias. Se pausa con hover (`hover:[animation-play-state:paused]`) y con un
+  botón con `aria-pressed`; con `motion-reduce:` no se anima y la fila se desplaza a mano.
+- Imagen decorativa → `alt=""` (el lector de pantalla la salta). Sin `alt`, algunos leen el nombre del archivo.
 - Antes de escribir JavaScript, preguntar si HTML ya lo resuelve.
 
 ### Prettier
@@ -641,6 +659,10 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
 - Las clases van **dentro** de `class="..."`. Escritas sueltas en la etiqueta son atributos y no hacen nada.
 - Tailwind no arma clases con variables: ``class={`top-${n}`}`` no funciona porque busca nombres **completos** en el
   código. Para valores que dependen de datos, usar `style={`top: ${n}rem`}`.
+- Animaciones propias en `@theme`: `--animate-carrusel: carrusel 45s linear infinite;` + `@keyframes carrusel {...}`
+  generan la clase `animate-carrusel`, igual que `--color-X` genera `bg-X`.
+- Propiedades sin clase en Tailwind: clase arbitraria `[propiedad:valor]` (ej. `[animation-play-state:paused]`). Si se
+  agrega desde JS, escribirla **completa** en el código para que Tailwind la encuentre.
 - Elementos con posición (`sticky`, `relative`...) que se superponen: el que viene después en el HTML queda encima,
   salvo que otro tenga `z-index` (por eso el header lleva `z-10`).
 - El padding de algo clicable va en el elemento mismo (ej. `<summary>`), para que toda la franja se pueda clicar. El
@@ -767,19 +789,19 @@ de una fila quedan iguales aunque el texto tenga largos distintos.
 
 ### 2. Qué se reutiliza
 
-| Pieza                                                    | Qué hacer                                                             |
-| -------------------------------------------------------- | --------------------------------------------------------------------- |
-| `BaseLayout.astro`                                       | Copiar. Cambiar `og:site_name` y el texto del footer                  |
-| `Header.astro`                                           | Copiar. Cambiar los enlaces según las secciones                       |
-| `InfoCard.astro`, `SectionTitle.astro`, `TeamCard.astro` | Copiar. Ajustar los campos si el cliente pide otros                   |
-| `Button.astro`, `StackCard.astro`, `FaqItem.astro`       | Copiar. Revisar colores y textos                                      |
-| Aparición al hacer scroll                                | Copiar el bloque de `global.css` y los dos `<script>` de `BaseLayout` |
-| `src/data/*.ts`                                          | Copiar la estructura. Reemplazar los datos                            |
-| `src/styles/global.css`                                  | Copiar. Cambiar colores y revisar su contraste                        |
-| Fuentes en `astro.config.mjs`                            | Copiar. Cambiar por las fuentes de la marca                           |
-| `Logo.astro`, `favicon.svg`, `og-image.png`              | Reemplazar por los del cliente                                        |
-| `wrangler.jsonc`                                         | Copiar. Cambiar `name` y `compatibility_date`                         |
-| `public/robots.txt`                                      | Copiar. Cambiar el dominio                                            |
+| Pieza                                                                  | Qué hacer                                                             |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `BaseLayout.astro`                                                     | Copiar. Cambiar `og:site_name` y el texto del footer                  |
+| `Header.astro`                                                         | Copiar. Cambiar los enlaces según las secciones                       |
+| `InfoCard.astro`, `SectionTitle.astro`, `TeamCard.astro`               | Copiar. Ajustar los campos si el cliente pide otros                   |
+| `Button.astro`, `StackCard.astro`, `FaqItem.astro`, `TeamTicker.astro` | Copiar. Revisar colores y textos                                      |
+| Aparición al hacer scroll                                              | Copiar el bloque de `global.css` y los dos `<script>` de `BaseLayout` |
+| `src/data/*.ts`                                                        | Copiar la estructura. Reemplazar los datos                            |
+| `src/styles/global.css`                                                | Copiar. Cambiar colores y revisar su contraste                        |
+| Fuentes en `astro.config.mjs`                                          | Copiar. Cambiar por las fuentes de la marca                           |
+| `Logo.astro`, `favicon.svg`, `og-image.png`                            | Reemplazar por los del cliente                                        |
+| `wrangler.jsonc`                                                       | Copiar. Cambiar `name` y `compatibility_date`                         |
+| `public/robots.txt`                                                    | Copiar. Cambiar el dominio                                            |
 
 ### 3. Secciones nuevas del proyecto del cliente
 

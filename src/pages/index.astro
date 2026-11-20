@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import InfoCard from '../components/InfoCard.astro'
-import TeamCard from '../components/TeamCard.astro'
+import TeamTicker from '../components/TeamTicker.astro'
 import SectionTitle from '../components/SectionTitle.astro'
 import Button from '../components/Button.astro'
 import FaqItem from '../components/FaqItem.astro'
@@ -59,11 +59,7 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 
 	<section id="equipo" class="py-8 px-4 scroll-mt-20">
 		<SectionTitle title="Equipo" />
-		<div class="grid gap-4 grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto">
-			{members.map((member) => (
-				<TeamCard {...member} />
-			))}
-		</div>
+		<TeamTicker {members} />
 	</section>
 
 	<section id="servicios" class="py-8 px-4 bg-fondo scroll-mt-20">

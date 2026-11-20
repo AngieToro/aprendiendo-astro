@@ -1,0 +1,82 @@
+---
+// Carrusel del equipo: las tarjetas se desplazan solas hacia la izquierda, sin fin.
+// La lista va dos veces seguidas: al terminar la primera copia, la animación vuelve al inicio
+// y como la segunda copia es igual, el salto no se nota.
+// Accesibilidad: se pausa con el mouse encima o con el botón (WCAG 2.2.2), y con movimiento
+// reducido no se anima: la fila se desplaza a mano.
+import TeamCard from './TeamCard.astro'
+import type { Member } from '../data/teams.ts'
+
+interface Props {
+	members: Member[]
+}
+
+const { members } = Astro.props
+---
+
+<div class="max-w-5xl mx-auto">
+	<div class="flex justify-end mb-2 motion-reduce:hidden">
+		{/* Botón solo con ícono: aria-label es su nombre para lectores de pantalla.
+		    aria-pressed="true" = pausado; los íconos cambian solos con group-aria-pressed */}
+		<button
+			id="carrusel-boton"
+			type="button"
+			aria-label="Pausar carrusel"
+			aria-pressed="false"
+			class="group flex items-center justify-center size-8 text-primario border border-secundario/30 rounded-full transition hover:border-acento"
+		>
+			{/* Pausa (dos barras): visible mientras se mueve */}
+			<svg
+				class="size-3 group-aria-pressed:hidden"
+				viewBox="0 0 12 12"
+				fill="currentColor"
+				aria-hidden="true"
+			>
+				<rect x="2" y="1" width="3" height="10" rx="1"></rect>
+				<rect x="7" y="1" width="3" height="10" rx="1"></rect>
+			</svg>
+			{/* Play (triángulo): visible cuando está pausado */}
+			<svg
+				class="size-3 hidden group-aria-pressed:block"
+				viewBox="0 0 12 12"
+				fill="currentColor"
+				aria-hidden="true"
+			>
+				<path d="M3 1.5v9a.5.5 0 0 0 .77.42l7-4.5a.5.5 0 0 0 0-.84l-7-4.5A.5.5 0 0 0 3 1.5Z"></path>
+			</svg>
+		</button>
+	</div>
+
+	{/* La máscara difumina los bordes; py-2 deja espacio para el hover de las tarjetas */}
+	<div class="py-2 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] motion-reduce:overflow-x-auto">
+		<div
+			id="carrusel-pista"
+			class="flex w-max animate-carrusel hover:[animation-play-state:paused] motion-reduce:animate-none"
+		>
+			{[0, 1].map((copia) => (
+				<div
+					class:list={['flex gap-4 pr-4 *:w-56 *:shrink-0', copia === 1 && 'motion-reduce:hidden']}
+					aria-hidden={copia === 1 ? 'true' : undefined}
+				>
+					{members.map((member) => (
+						<TeamCard {...member} />
+					))}
+				</div>
+			))}
+		</div>
+	</div>
+</div>
+
+<script>
+	// Al hacer clic en el botón, pausar o reanudar la pista
+	const boton = document.querySelector('#carrusel-boton')
+	const pista = document.querySelector('#carrusel-pista')
+
+	// Solo si los dos elementos existen
+	if (boton && pista) {
+		boton.addEventListener('click', () => {
+			const pausado = pista.classList.toggle('[animation-play-state:paused]')
+			boton.setAttribute('aria-pressed', String(pausado))
+		})
+	}
+</script>
