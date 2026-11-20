@@ -56,6 +56,7 @@ aprendiendo-astro/
 │   ├── components/
 │   │   ├── Header.astro         ← logo + menú de anclas + hamburguesa + desplegable (con <script>)
 │   │   ├── Logo.astro           ← ícono SVG + nombre (usa tokens de color)
+│   │   ├── Hero.astro           ← portada: título + collage de fotos que entran al cargar y se alejan al bajar
 │   │   ├── SectionTitle.astro   ← título de sección: h2 + línea de acento (prop: title)
 │   │   ├── Button.astro         ← botón con flecha que gira (props: label, href, variant, target, rel)
 │   │   ├── InfoCard.astro       ← tarjeta con ícono, título y texto (misión, visión y valores)
@@ -69,7 +70,10 @@ aprendiendo-astro/
 │   │   ├── values.ts            ← misión, visión (purpose) y valores
 │   │   ├── faq.ts               ← preguntas frecuentes
 │   │   └── contact.ts           ← correo, WhatsApp y sus URL (mailtoUrl, whatsappUrl)
-│   ├── assets/team/             ← fotos que Astro optimiza
+│   ├── assets/                  ← fotos que Astro optimiza
+│   │   ├── team/                ← fotos del equipo
+│   │   ├── portada/             ← fotos del collage de la portada (800 px)
+│   │   └── mision.jpg           ← fondo de la sección misión (1920 px)
 │   └── styles/
 │       └── global.css           ← carga Tailwind + tokens de marca (@theme) + animación de aparición
 ├── public/                      ← se copia tal cual al sitio (favicon.svg, og-image.png, robots.txt)
@@ -628,6 +632,17 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
   (`sips --resampleWidth 1920 archivo.jpg` en macOS), porque Git guarda todas las versiones. Con `widths` + `sizes`,
   Astro genera varios tamaños y el celular descarga el chico (aquí: 26 KB en vez de 120 KB). Revisar el
   `before / after` del build: más de ~300 KB es señal de alerta.
+- **Portada con collage** (`Hero.astro`, inspirada en Elias Vent pero en una sola pantalla y sin JS): título al centro
+  y fotos `absolute` alrededor, configuradas en una lista (posición, dirección de salida `x`/`y`, `soloEscritorio`).
+  Al cargar entran una a una (`animate-entrar` + `animation-delay`); al bajar se alejan hacia el borde más cercano y
+  se desvanecen (`@keyframes portada-salir` con `translate: var(--x) var(--y)`). La entrada va en el `<div>` y la
+  salida en la `<Image>`, para que las dos animaciones no se pisen. Fotos decorativas: `alt=""` y
+  `loading="eager"` (se ven al cargar).
+- **Animación ligada al scroll** (CSS, sin JS): `animation: nombre linear both;` y **después**
+  `animation-timeline: scroll(root); animation-range: 0 70vh;`. Con `scroll()` solo, usa el contenedor de scroll
+  más cercano, y `overflow-hidden` convierte a la sección en uno (que nunca se mueve): por eso `scroll(root)`.
+  Envolver en `@supports (animation-timeline: scroll())` y `prefers-reduced-motion: no-preference`; sin soporte, el
+  collage queda quieto. Diagnóstico: `elemento.getAnimations()[0].timeline.source` dice qué está mirando.
 - **Carrusel del equipo** (`TeamTicker.astro`): la lista va **dos veces** en una fila (`flex w-max`), la segunda con
   `aria-hidden="true"`. La animación mueve la fila `-50%` (una copia) y se repite sin que se note el salto; el `pr-4`
   de cada copia iguala el espacio entre copias. Se pausa con hover (`hover:[animation-play-state:paused]`) y con un
@@ -663,6 +678,12 @@ El dominio y la cuenta de Cloudflare conviene dejarlos a nombre del cliente, par
   generan la clase `animate-carrusel`, igual que `--color-X` genera `bg-X`.
 - Propiedades sin clase en Tailwind: clase arbitraria `[propiedad:valor]` (ej. `[animation-play-state:paused]`). Si se
   agrega desde JS, escribirla **completa** en el código para que Tailwind la encuentre.
+- Los prefijos responsive significan "**desde** este ancho hacia arriba": `hidden md:block` = oculto en celular,
+  visible desde 768 px. Pantallas pequeñas = la clase **sin** prefijo.
+- Si cambias el ancho de una `<Image>` con clases (`w-36 md:w-64`), actualiza también `sizes` (lo que mide en
+  pantalla) y `widths` (versiones a generar, ~2× para retina).
+- `overflow-hidden` crea un contenedor de scroll: rompe `sticky` y `scroll()` en los hijos. `overflow-clip` recorta
+  igual sin ese efecto.
 - Elementos con posición (`sticky`, `relative`...) que se superponen: el que viene después en el HTML queda encima,
   salvo que otro tenga `z-index` (por eso el header lleva `z-10`).
 - El padding de algo clicable va en el elemento mismo (ej. `<summary>`), para que toda la franja se pueda clicar. El
@@ -789,19 +810,19 @@ de una fila quedan iguales aunque el texto tenga largos distintos.
 
 ### 2. Qué se reutiliza
 
-| Pieza                                                                  | Qué hacer                                                             |
-| ---------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `BaseLayout.astro`                                                     | Copiar. Cambiar `og:site_name` y el texto del footer                  |
-| `Header.astro`                                                         | Copiar. Cambiar los enlaces según las secciones                       |
-| `InfoCard.astro`, `SectionTitle.astro`, `TeamCard.astro`               | Copiar. Ajustar los campos si el cliente pide otros                   |
-| `Button.astro`, `StackCard.astro`, `FaqItem.astro`, `TeamTicker.astro` | Copiar. Revisar colores y textos                                      |
-| Aparición al hacer scroll                                              | Copiar el bloque de `global.css` y los dos `<script>` de `BaseLayout` |
-| `src/data/*.ts`                                                        | Copiar la estructura. Reemplazar los datos                            |
-| `src/styles/global.css`                                                | Copiar. Cambiar colores y revisar su contraste                        |
-| Fuentes en `astro.config.mjs`                                          | Copiar. Cambiar por las fuentes de la marca                           |
-| `Logo.astro`, `favicon.svg`, `og-image.png`                            | Reemplazar por los del cliente                                        |
-| `wrangler.jsonc`                                                       | Copiar. Cambiar `name` y `compatibility_date`                         |
-| `public/robots.txt`                                                    | Copiar. Cambiar el dominio                                            |
+| Pieza                                                                                | Qué hacer                                                             |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| `BaseLayout.astro`                                                                   | Copiar. Cambiar `og:site_name` y el texto del footer                  |
+| `Header.astro`                                                                       | Copiar. Cambiar los enlaces según las secciones                       |
+| `InfoCard.astro`, `SectionTitle.astro`, `TeamCard.astro`                             | Copiar. Ajustar los campos si el cliente pide otros                   |
+| `Button.astro`, `StackCard.astro`, `FaqItem.astro`, `TeamTicker.astro`, `Hero.astro` | Copiar. Revisar colores y textos                                      |
+| Aparición al hacer scroll                                                            | Copiar el bloque de `global.css` y los dos `<script>` de `BaseLayout` |
+| `src/data/*.ts`                                                                      | Copiar la estructura. Reemplazar los datos                            |
+| `src/styles/global.css`                                                              | Copiar. Cambiar colores y revisar su contraste                        |
+| Fuentes en `astro.config.mjs`                                                        | Copiar. Cambiar por las fuentes de la marca                           |
+| `Logo.astro`, `favicon.svg`, `og-image.png`                                          | Reemplazar por los del cliente                                        |
+| `wrangler.jsonc`                                                                     | Copiar. Cambiar `name` y `compatibility_date`                         |
+| `public/robots.txt`                                                                  | Copiar. Cambiar el dominio                                            |
 
 ### 3. Secciones nuevas del proyecto del cliente
 

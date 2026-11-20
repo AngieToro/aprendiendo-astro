@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
 import InfoCard from '../components/InfoCard.astro'
 import TeamTicker from '../components/TeamTicker.astro'
 import SectionTitle from '../components/SectionTitle.astro'
@@ -18,12 +19,7 @@ const description = 'Consultora TI que ayuda a pymes a visualizar su negocio'
 ---
 
 <BaseLayout {description} title="TestCorp">
-	<section id="inicio" class="bg-primario text-white px-4 py-16 text-center">
-		<h1 class="font-bold text-3xl md:text-4xl font-titulos">
-			<span class="block">Bienvenidos</span>
-			<span class="block">TestCorp te permite visualizar tu negocio</span>
-		</h1>
-	</section>
+	<Hero />
 
 	<section id="nosotros" class="py-8 px-4 scroll-mt-20">
 		<SectionTitle title="Quiénes somos" />

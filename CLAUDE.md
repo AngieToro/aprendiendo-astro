@@ -91,4 +91,7 @@ El mini proyecto reproduce esa misma estructura con contenido ficticio
       `SectionTitle light` e `InfoCard variant="vidrio"`.
       Pieza 6 (menú a pantalla completa) descartada: el menú actual basta para un one-page.
       Pieza 7: carrusel del equipo (`TeamTicker.astro`, `animate-carrusel` en `@theme`, dos copias + `-50%`, pausa con
-      hover y botón ícono con `aria-pressed`, `motion-reduce`). Pendiente: 8) galería de Elias Vent.
+      hover y botón ícono con `aria-pressed`, `motion-reduce`).
+      Pieza 8 (2026-11-20): portada `Hero.astro` con collage de 6 fotos (`src/assets/portada/`, 4 en celular), entrada
+      `animate-entrar` y salida ligada al scroll (`animation-timeline: scroll(root)`), inspirada en Elias Vent pero en
+      una pantalla y sin JS. Piezas de templates terminadas. Pendiente opcional: lección 13 (CMS).

@@ -1,0 +1,60 @@
+---
+// Portada: título al centro y un collage de fotos alrededor.
+// Al cargar, las fotos entran una a una (animate-entrar). Al bajar, se alejan hacia los bordes y se
+// desvanecen (clase portada-foto, animación ligada al scroll en global.css). Solo CSS, sin JavaScript.
+import { Image } from 'astro:assets'
+import foto1 from '../assets/portada/portada1.jpg'
+import foto2 from '../assets/portada/portada2.jpg'
+import foto3 from '../assets/portada/portada3.jpg'
+import foto4 from '../assets/portada/portada4.jpg'
+import foto5 from '../assets/portada/portada5.jpg'
+import foto6 from '../assets/portada/portada6.jpg'
+
+// Dónde va cada foto y hacia dónde sale al bajar (x, y: % del tamaño de la foto).
+// soloEscritorio: en celular se oculta, para no tapar el título.
+const fotos = [
+	// se ve siempre
+	{ src: foto1, posicion: 'top-[8%] left-[4%]', x: '-90%', y: '-70%', soloEscritorio: false },
+	{ src: foto2, posicion: 'top-[6%] right-[5%]', x: '90%', y: '-70%', soloEscritorio: false },
+	{ src: foto3, posicion: 'bottom-[8%] left-[8%]', x: '-90%', y: '70%', soloEscritorio: false },
+	{ src: foto4, posicion: 'bottom-[10%] right-[4%]', x: '90%', y: '70%', soloEscritorio: false },
+	// no se ve en pantallas pequeñas (telefono)
+	{ src: foto5, posicion: 'top-[3%] left-[45%]', x: '0%', y: '-120%', soloEscritorio: true },
+	{ src: foto6, posicion: 'bottom-[3%] left-[45%]', x: '0%', y: '120%', soloEscritorio: true },
+]
+---
+
+<section
+	id="inicio"
+	class="relative overflow-hidden bg-primario text-white min-h-[85svh] flex items-center justify-center px-4 py-16 text-center"
+>
+	{fotos.map((foto, index) => (
+		// La entrada va en este div y la salida en la imagen: así las dos animaciones no se pisan
+		<div
+			class:list={[
+				'absolute w-36 md:w-64 animate-entrar motion-reduce:animate-none',
+				foto.posicion,
+				foto.soloEscritorio && 'hidden md:block',
+			]}
+			style={`animation-delay: ${index * 150}ms`}
+		>
+			<Image
+				src={foto.src}
+				alt=""
+				widths={[320, 560]}
+				sizes="(min-width: 768px) 256px, 144px"
+				loading="eager"
+				class="portada-foto w-full aspect-[3/2] object-cover rounded-xl border border-white/20 shadow-2xl opacity-80"
+				style={`--x: ${foto.x}; --y: ${foto.y}`}
+			/>
+		</div>
+	))}
+
+	<div class="relative z-10">
+		<h1 class="font-bold text-3xl md:text-5xl font-titulos">
+			<span class="block">Bienvenidos</span>
+			<span class="block mt-2">TestCorp te permite visualizar tu negocio</span>
+		</h1>
+		<div class="w-16 h-1 bg-acento mx-auto mt-6" aria-hidden="true"></div>
+	</div>
+</section>
